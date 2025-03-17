@@ -1,2 +1,2 @@
 # MEng
-To keep track of my Masters research and work contributions
+A repository to keep track of my Masters research and work contributions
