@@ -1,0 +1,26 @@
+{
+	"CameraName": "CineCameraActor_0",
+	"Intrinsics":
+	{
+		"FocalLength":
+		{
+			"fx": 2828.28271484375,
+			"fy": 2828.282958984375
+		},
+		"PrincipalPoint":
+		{
+			"cx": 960,
+			"cy": 540
+		},
+		"ImageDimensions":
+		{
+			"Width": 1920,
+			"Height": 1080
+		},
+		"IntrinsicMatrix": [
+			[ 2828.28271484375, 0, 960 ],
+			[ 0, 2828.282958984375, 540 ],
+			[ 0, 0, 1 ]
+		]
+	}
+}
