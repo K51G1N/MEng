@@ -1,0 +1,48 @@
+{
+"$schema": "http://json-schema.org/draft-07/schema#",
+"title": "SUMediPose Frame Sequence",
+"type": "array",
+"items": {
+    "type": "object",
+    "required": ["frame_num", "point_ids", "xyz", "xyz_wand"],
+    "properties": {
+        "frame_num": {
+            "description": "The frame number in the sequence",
+            "type": "integer"
+        },
+        "point_ids": {
+            "description": "Vicon labels for 3D coordinates from C7 to T10",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "xyz": {
+            "description": "List of Vicon Keypoints",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": ["number", "null"]
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                }
+            },
+        "xyz_wand": {
+            "description": "List of 3D coordinates of the Vicon wand",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": ["number", "null"]
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "minItems": 5,
+                "maxItems": 5                
+            }
+        }
+    }
+}

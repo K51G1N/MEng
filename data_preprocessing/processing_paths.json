@@ -1,0 +1,10 @@
+{
+  "sumedi_json_wcs_path": "test/test_wcs",
+  "mosh_c3d_template": "test/jumping_jacks.c3d",
+  "constructed_c3d_path": "test_wcs_c3d",
+  "primed_c3d_path": "test_wcs_c3d_prime",
+  "soma_support_base": "test/support_base",
+  "output_root_dir": "test/test_results",
+  "npz_animations_path": "test/test_results/test_npz_animations",
+  "markerset_yaml": "superset"
+}
