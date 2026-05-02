@@ -1,0 +1,128 @@
+\mychapter{Literature Review}{Literature Review}{}
+\label{chap:literaturereview}
+
+This chapter gives an overview of key concepts that are essential to understanding this research and necessary to accomplish the objectives setout in the previous chapter. Firstly stereocalibration is looked into for camera calibration. Triangulation for converting 2D to 3D allowing for 3D human pose estimation. A review of human pose estimation comprising of marker and markerless pose estimation systems and algorithms. Biomechanics is reviewed and how the human form is evaluated. Lastly we look at modern day report and document generation techniques.
+All of these aforementioned topics are brought together in light of the project at hand and how they will each aid in solving the objectives.
+
+\section{Synthetic Data}
+
+\subsection{Human Body Models}
+representing the human body is an important aspect of 
+
+\subsubsection{SMPL}
+
+SMPL (A Skinned Multi-Person Linear Model) is a learned model of the human body shape and posedependent shape variation \citet{loper2015smpl}.
+This is a human body model 
+
+\subsection{SMPL-X}
+
+\section{Human Motion}
+
+\subsection{AMASS}
+
+\subsection{SUMediPose}
+
+\subsection{SOMA}
+\subsection{MoSh{++}}
+
+
+\subsection{Existing Sythetic Datasets}
+\subsubsection{SURREAL}
+\subsubsection{SynBody}
+\subsubsection{BEDLAM}
+\subsubsection{BEDLAM 2.0}
+
+
+\section{Camera Networks and Camera Placement}
+
+\section{Stereocalibration}
+
+\section{Triangulation}
+
+\section{Pose Estimation}
+
+We have two kinds of pose estimation we have bottom up and a top down.
+The top down approach identifies the humans and then identifies the keypoints of each human.
+The bottom up approach identifies all keypoints and then identifies which human pose it belongs to.
+
+\subsection{Marker Pose Estimation}
+\subsection{Markerless Pose Estimation}
+
+\section{Human Pose Estimation Models}
+\subsubsection{OpenPose}
+\subsubsection{HRNet}
+\subsection{YOLO Pose}
+\subsection{ViT Pose}
+
+\section{Evaluation Metrics}
+\subsection{MPJPE}
+
+We want to consider the MPJPE this is a good 
+
+\subsection{PCK}
+
+\section{Differential Evolution}
+
+This content is all coming from Chapter 13 of \citet{engelbrecht2007computational}
+
+Differeential evolution (DE), is a stochastic, population-based search
+strategy. It uses the distance from current population to guide the search process. It was developed to
+be applied to continuous search spaces. \cite{engelbrecht2007computational}
+
+DE differs from other evolutionary algorithms as mutation is applied first to generate a trial 
+vector which is used within the crossover operator to produce one offspring and mutation step sizes are not 
+sampled from a prior known probability distribution functiomn
+
+The mutation step sizes are influenced by difference between individuals of the current population
+
+\subsection{Difference Vectors}
+
+The positions of individuals provide information about the fitness landscape. It assists in mapping out 
+the unknown nature of the search space of potential solutions. 
+The initial population provides a good representation of the search space with relatively large
+distances between individuals. As the search progresses the distances between individuals of the
+population decreases
+
+\subsection{mutation}
+\subsection{crossover}
+\subsection{selection operators }
+\subsection{the algorithm}
+\subsection{control parameters}
+
+
+
+
+\section{Biomechanics}
+
+\section{Report and Document Generation}    
+
+
+\section{IDEAS}
+
+This contains raw ideas
+
+use the unreal vision paper and the unity paper as motivation
+
+due to the fact that no literature existed with concrete evidence for ideal camera set up this research is motivated to create a testing bed for various camera configurations and setting them as physical. We have ground truth being a realistic model that we can use and know exactly in 3D where keypoints are. We then test various camera configurations and see which setup yields the least error between inferred keypoint and ground truth key point. In addition to simulating and testing camera configurations we can generate synthetic datasets and testing the performance of models on various conditions: lighting, environment, camera setup, camera specifications, skin-tone variations and obeseity of characters/actors.
+
+I'd like to investigate a binary tree for exercise classification and identification.
+example number of appendages touching/ points of contact ground standing, sitting, then furtheirng this as we can then classify exercises and what the person is doing. Then for real-time classification we can infer and then load calculations accordingly.
+
+This is important as we can then have concrete reasons for why we are doing this research and that based on a set of criteria i.e camera quality, number of camera's we can find the optimal setup for these cameras. A script can go through and find the best camera configuration and setup for the given restrictions. 
+
+This then can inform other people's camera setups and choices but allowing people to enter criteria or their setup requirements. A testing sandbox.
+
+We can also create robust model based on wide array of conditions instead of purely based on Vicon as the ground truth. 
+
+We can then compare proposed configuration and setup to read world set up. Compare simulated proposed setups to real world setup and if there is enough of a correlation that the sandbox is realiable and it's suggestions can be trusted.
+
+I want a large number of citations to really ground this research that it's not airy fairy but is super concrete to the synthetic and has a leg to stand on
+
+this is a valuable contribution to hpe field and future work relying on HPE models.
+
+\section{New Direction}
+
+I have embarked on a journey of trying to create or modify existing data generation 
+
+
+\label{sec:relatedwork}

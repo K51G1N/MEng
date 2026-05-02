@@ -1,0 +1,56 @@
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+\renewcommand{\labelenumiv}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}.\arabic{enumiv}}
+
+\mychapter{Introduction}{Introduction}{}
+\label{chap:introduction}
+
+\mysection{Background and Motivation}{Background and Motivation}
+\label{sec:background}
+
+Accurately measuring human motion is a foundational challenge in sports science and rehabilitation. Specialists, such as strength and conditioning (SNC) coaches, traditionally rely on visual observation or 2D video data to assess technique and mitigate injury risks associated with biomechanical overload \cite{chariar2023ai,forte2023biomechanics}.
+While professional guidance is crucial for safe and efficient training, the availability of specialists is a significant bottleneck; coaches often manage multiple athletes simultaneously, making continuous, real-time feedback difficult to sustain \cite{needham2021accuracy}.
+To address this, 3D motion capture systems like Vicon are considered the``gold standard'' for biomechanical analysis\cite{matsuda2025reliability, hansen2024validation, song2022evolution}.
+However, these systems are prohibitively expensive, require controlled laboratory environments, and necessitate time-consuming marker placement by trained professionals \cite{mercadal2024exercise,kuster2016accuracy}.
+Markerless Pose Estimation (MPE) offers a compelling alternative, yet a critical gap exists in the availability of inexpensive multiview markerless 3D human pose estimation (MMPE) systems that simultaneously meet the following needs: a low-cost system, lowering the barrier to accessibility, and usability in low-resource contexts as opposed to being confined to a laboratory environment 
+
+MMPE systems are comprised of four main components \cite{colyer2018review}:
+\begin{enumerate}
+    \item Cameras (Configuration and Calibration)
+    \item 3D Skeletal and Shape Model
+    \item Image Features
+    \item An Algorithm used to determine attributes such as shape, pose, and position of the model.
+\end{enumerate}
+
+Cameras underpin every aspect of the system, and the quality of the results of a MMPE system is largely dependent on the configuration and number of cameras used \cite{rahimian2016optimal}. Poor configuration and calibration of cameras within a system leads to poor feature extraction. Poor feature extraction, in turn, leads to poor detection of attributes such as shape, pose, and position. Therefore this research focuses specifically on optimizing the camera configuration of the MMPE system.
+
+This research builds upon the project done by Steyn \cite{steyn2024markerless}, which demonstrated the feasibility of a real-time MMPE system providing form feedback. While Steyn \cite{steyn2024markerless} proved that a low-cost hardware pipeline could triangulate human movement in 3D, the system’s accuracy remained sensitive to environmental factors. Identifying possible future work, Steyn \cite{steyn2024markerless} recommended areas such as improved accuracy and application-specific research. Because literature shows that camera placement plays an important role in the success rate of pose estimation algorithms \cite{rahimian2016optimal, jorgensen2018simulation}, this research identifies that accuracy is not solely a function of the pose estimation algorithm, but a product of camera placement.
+
+We therefore asked the research question: ``What is the optimal camera placement and configuration for a MMPE system?'' Systems that are optimally set up can lead to improved system accuracy, precision, success rate, robustness, and overall system performance gains. Given the difficulty of testing every physical camera configuration in the real-world, this research leverages synthetic data generation and simulation within 3D environments to identify the configurations that maximize information gain and minimize occlusion.
+
+The search space for camera placement is effectively infinite. Determining the ideal configuration involves adjusting the distance from the subject, azimuth angles, various camera orientations (yaw, pitch, and roll), the height of the sensor, and the total number of cameras in the system \cite{zhao2013approximate}. Physical systems require recalibration for every camera configuration. It is impractical and too time consuming to set up physical cameras, run tests for multiple motion capture sequence trials and then subsequently evaluate the performance of a given setup and to then repeat this hundreds of thousands of times. \cite{jorgensen2018simulation}
+Given the impracticality and limitations of physical testing we transfer this physical optimization problem to the realm of simulation.
+
+\subsection{Problem Statement}
+\label{sec:problemstatement}
+
+While Multiview Markerless 3D Pose Estimation (MMPE) systems offer a compelling low-cost alternative, the quality of their results is critically dependent on camera configuration. Poor camera placement leads to poor feature extraction and inaccurate pose detection. However, determining the ideal configuration in the real world is impractical, as the search space is effectively infinite and physical testing requires time-consuming recalibration for every variation. Without solving the configuration problem via simulation, MMPE systems remain sensitive to environmental factors and prone to suboptimal setup. This compromises system accuracy, rendering the results less reliable than required for widespread adoption or applications where accuracy is crucial.
+
+\subsection{Research Aims and Objectives}
+\label{sec:researchaimsandobjectives}
+
+This research aims to improve MMPE systems by answering the research question, ``What is the optimal camera placement and configuration for a Multiview markerless 3D human pose estimation system?'', by establishing five key components: a synthetic data pipeline, a simulation environment, a pose estimation algorithm, a computational intelligence algorithm and a looping system that adjusts the virtual simulation environment based on system evaluation.
+This section breaks down the research aim into objectives along with their motivations:
+
+\textbf{Objective one: Establish a synthetic data pipeline.} There is an increase in the number of publicly available synthetic datasets that are being released. BEDLAM 2.0 is one such set. We will investigate the suitability of using this data set or perhaps using the render and image generation code they provide to then customize it for our own pipeline approach. The basis of the synthetic data is the SMPL-X body model and it will be prepared in Blender. This will allow for the creation or usage of a wide variety of synthetic humans with varying BMI’s, ethnicities and clothing configurations. For each unique character there will be 3D ground truth keypoint locations associated with it. The body model is animated by using motion data from the AMASS dataset. By using a balanced dataset we ensure the configuration is robust across human phenotypes and body shapes. 
+
+\textbf{Objective two: Setup a realistic simulation environment.} Along with high-fidelity humans we need a realistic scene to be set up for the synthetic human to perform in. This should be as close to a real-world environment to mimic real data. We need the ability to customize and place cameras in a desired configuration. We will use Unreal Engine due to its popularity, realism and suitability for this problem. We will use the Movie Render Queue to obtain the high-quality frames from the camera actors in the scene to save them locally.
+
+\textbf{Objective three: Setup a pose estimation algorithm.} We need to use an out of the box pose estimation model to then perform inference of the keypoints from each of the frames from the simulated environment. This allows us to plug-and-play and potentially examine the performance of models in optimal configurations. We will evaluate skeletal compatibility between the SMPL-X ground truth and the chosen pose estimation model. If topological discrepancies arise, we will implement an affine-combining autoencoder (ACAE) to bridge the skeletal formats. We can then evaluate the performance of the pose model for a given camera configuration and motion sequence by comparing it to the 3D ground truth data. One metric that would be considered is the Mean Per Joint Position Error (MPJPE).
+
+\textbf{Objective four: Formulate the optimization cost function and implement the Simulated Annealing (SA) algorithm.} We will focus on adapting the Simulated Annealing approach as identified by \citet{rahimian2016optimal}. This involves first defining a cost function that quantifies reconstruction accuracy (MPJPE) and occlusion. We will then implement the SA algorithm and systematically calibrate its hyperparameters (specifically the cooling schedule and perturbation magnitude) to ensure the system converges on robust global optima within the simulation environment.
+
+\textbf{Objective five: Implement a looping system for our synthetic data setup.} Based on the evaluation of the system and its camera configuration we will need to iteratively make adjustments. We will need to adjust the simulation environment camera placement, the model that is loaded in. This will allow us to go over the search space in our attempt to find the optimal camera configuration.
+
+
+These five objectives define a clear path required to answer the research question ``What is the optimal camera placement and configuration for a Multiview markerless 3D human pose estimation system?'' and helps to improve MMPE systems by establishing clear optimal camera configurations for various sets of cameras for accurate and precise motion capture. 

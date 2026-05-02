@@ -1,0 +1,66 @@
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+\renewcommand{\labelenumiv}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}.\arabic{enumiv}}
+
+\mychapter{Methodology and Proposed Research Plan}{Methodology and Proposed Research Plan}{}
+\label{chap:methodologyandproposedresearchplan}
+
+\mysection{Methodology}{Methodology}
+\label{sec:methodology}
+
+ This research employs a simulation-based solution to identify optimal camera configurations for a MMPE system.
+The choice of a simulation based approach is to avoid the physical constraints and limitations of constructing, calibrating and measuring the performance of a system for every change in camera position within what is an infinite search space. Our simulation environment adopts the high-fidelity synthetic data principles established by BEDLAM 2.0 (B2) \cite{tesch2025bedlam2}. By  integrating state-of-the-art body models and motion archives, we create a robust ground truth foundation essential for evaluating the impact of camera placement on MMPE performance.
+
+The synthetic data pipeline constituents are as follows
+
+\subsection{Synthetic Data Pipeline}
+\label{sec:syntheticdatapipeline}
+
+The core of our methodology is the generation of high-fidelity animated humans in realistic 3D environments. This ensures that the optimization process is robust and consistent removing the human error in camera placement and calibration.
+
+\begin{enumerate}
+    \item Body Model (SMPL-X)
+    \item Motion Data (AMASS)
+    \item Synthetic Environment and Rendering (B2)
+\end{enumerate}
+
+\subsubsection{Body Model (SMPL-X)}
+
+We utilise the SMPL-X model \cite{pavlakos2019expressive}, which extends standard SMPL by jointly modeling the body, face, and hands. This expressivity is critical for our optimization; unlike standard models that focus on gross body pose , SMPL-X allows our system to evaluate camera configurations based on their ability to capture fine-grained extremity motions and facial expressions, which are often prone to self-occlusion. This model is also able to represent a range of heights ($1.4-2.2 m$) and weights ($40-110 kg$). This allows us to model a broad range of humans and ensure that the system is robust against variations of the human shape.
+
+\subsubsection{Motion Data (AMASS)}
+\cite{mahmood2019amass}
+To animate the SMPL-X models with realistic human movement we utilise the AMASS (Archive of Motion Capture as Surface Shapes) dataset. AMASS unifies 15 different optical marker based motion capture datasets into a common framework, providing over 40 hours of motion data and 11000 movements. By mapping this diverse archival data to the SMPL-X topology we ensure our simulated subjects perform physically valid and varied motions. This prevents the optimisation algorithm from overfitting to a narrow set of poses.
+
+\subsubsection{Synthetic Environment and Rendering (B2)}
+The visualisation and rendering of these scenes are managed through the B2 framework. B2 addresses previous limitations by including realistic hair, clothing and shoe assets. Our rendering pipeline adopts B2 framework's approach to scene composition. We incorporate its high-quality asset pipeline, specifically the use of strand-based hair and 3D clothing simulation. This allows us to simulate realistic occlusion scenarios where diverse clothing shapes and hair movement obscure body landmarks, forcing the optimization algorithm to identify camera positions robust to these real-world challenges.
+
+\subsection{Optimisation Strategy:}
+Finding the global maximum for coverage and accuracy within a multi-dimensional search space is a non-linear problem prone to local optima. To address this, we employ Simulated Annealing (SA), a probabilistic technique chosen for its proven efficacy in avoiding local minima within complex, multimodal search spaces \cite{rahimian2016optimal}. Unlike gradient-based methods, which struggle with the discrete and discontinuous nature of occlusion, SA allows the system to escape local optima by accepting suboptimal solutions early in the execution phase. The algorithm will iteratively perturb camera parameters (azimuth, elevation, distance) and evaluate the resulting system performance using the cost function, gradually ``cooling'' the system to converge on a robust global optimum. 
+
+\mysection{Proposed Research Plan:}{Proposed Research Plan:}
+\label{sec:proposedresearchplan:}
+\newline
+\textbf{Phase 1: Pipeline Engineering and Coordinate System Formalisation Duration: 19th January to 15th March 2026 (Weeks 1 to 8)} 
+
+\textbf{Technical Objectives:} The initial phase focuses on transitioning from manual data processing to an automated, headless synthetic data pipeline. This involves scripting the generation of diverse synthetic humans using the SMPL-X body model and AMASS motion sequences within Blender. A primary technical objective is the programmatic translation between coordinate systems, namely World, Camera, Image, and Pixel coordinate systems, to ensure consistency. This phase concludes with the generation of a preliminary dataset to validate the end-to-end pipeline architecture. 
+
+\textbf{Thesis Objectives:} Drafting of Chapter 1 (Introduction) and Chapter 3 (Methodology) proceeds as development progresses. Chapter 2 (Literature Review) will be updated weekly to synthesise current research on high-fidelity synthetic datasets such as B2 and SynBody.
+\newline
+\textbf{Phase 2: Computational Intelligence Integration and Looping Systems Duration:} 16th March to 3rd May 2026 (Weeks 9 to 15)
+
+\textbf{Technical Objectives:} Upon the completion of the automated pipeline, research shifts toward the implementation of the Simulated Annealing framework. This involves scripting the optimization loop where the algorithm perturbs camera coordinates, triggers a headless render in Blender/Unreal, and calculates the cost function based on the resulting ground-truth visibility. A key technical focus during this phase is the calibration of the ``cooling schedule'' to balance search exploration with convergence speed. 
+
+\textbf{Thesis Objectives:} Chapter 2 will be expanded to include a critical literature review of CI optimization techniques, providing the theoretical justification for selecting Simulated Annealing over gradient-based or genetic algorithms.
+\newline
+\textbf{Phase 3: Experimental Production and Data Synthesis Duration: 4th May to 19th July 2026 (Weeks 16 to 26)} 
+
+\textbf{Technical Objectives:} This phase is dedicated to high-volume data generation and experimental testing, conducted as a passive background process. The automated system will execute baseline experiments to identify optimal placements for multiple camera counts. Stress-test experiments will further evaluate system robustness by introducing human phenotype variability, including diverse BMI, ethnicities, and complex clothing configurations. 
+
+\textbf{Thesis Objectives:} Raw data will be processed into Chapter 4 (Results). This involves the creation of comprehensive visualisations and analytical plots to illustrate configuration performance and accuracy.
+\newline
+\textbf{Phase 4: Discussion, Synthesis, and Final Submission Duration: 20th July to 1st September 2026 (Weeks 27 to 32)} 
+
+\textbf{Technical Objectives:} The final phase focuses on the interpretation of experimental results and the synthesising of conclusions. Technical development is frozen to prioritise a final audit of the mathematical models and coordinate transformations used throughout the study. 
+
+\textbf{Thesis Objectives:} The research concludes with the drafting of the Discussion and Conclusions chapters. These sections will evaluate the findings in the context of low-resource environments and accessible motion capture. The completed thesis is scheduled for submission on 1st September 2026, providing an eight-week buffer for internal review prior to the hard deadline of 1st November

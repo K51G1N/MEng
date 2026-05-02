@@ -1,0 +1,110 @@
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+\renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+\renewcommand{\labelenumiv}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}.\arabic{enumiv}}
+
+\mychapter{Introduction}{Introduction}{}
+\label{chap:introduction}
+
+\mysection{Background and Motivation}{Background and Motivation}
+\label{sec:background}
+
+% (Sports scientists, biomechanists, medical doctors, physiotherapists, biokineticists, fitness technicians, exercise physiologists, fitness instructors, movement scientists and strength and conditioning coaches) 
+
+Accurately measuring human motion is a difficult task. Movement and health specialists such as sports scientists and strength and conditioning coaches examine human movement, sports techniques, and injury mechanisms. Specialists traditionally rely on vision-based tools such as photo or video data.
+
+
+Performing an exercise incorrectly or with poor form might result in injury \cite{Chariar2023} this is due to biomechanical overload which can lead to overuse injuries, joint degeneration, and other conditions. \citet{Forte2023} state that proper exercise biomechanics involves the correct form and technique to ensure the joints, muscles and bones are moving safely.
+Analysing the biomechanics and movement patterns and movement metrics such as angles and alignment of joints can help specialists track and potentially mitigate these injuries \cite{Forte2023}.
+If athletes are correctly analysed and their metrics assessed it can provide personalised and better-suited training programs on an athlete-to-athlete basis.
+Specialists are essential in tracking athlete performance as they can help inform training programs that can prevent injuries and overtraining \cite{Mileva2022}. %Sports Scientists
+Guidance from a strength and conditioning (SNC) coach or personal trainer is crucial for efficient training and injury prevention. SNC coaches are not always available and when they are available they can only focus on one athlete at a time or need to move between athletes. This makes it difficult to provide continuous feedback an athlete may need to progress \cite{Needham2021}.
+
+One of the leading human pose estimation systems is Vicon (Vicon Nexus, Vicon Motion Systems Ltd, Oxford, UK) a traditional multiview (meaning 3D) marker-based motion capture system. Vicon is the current gold standard for biomechanical application \cite{Matsuda2025, Hansen2024, Song2022}
+There are drawbacks to Vicon. It is time-consuming to set up. Vicon requires trained professionals to operate. This restricts usage to the laboratory and is expensive \cite{MercadalBaudart2024, Kuster2016}. 
+Markerless systems are lower in cost and easier to use as they do not require markers to be placed and reduce the time required for setup. However, they can still be costly \$26-\$32k USD \cite{muir2021}.
+The aforementioned system makes use of expensive specialised cameras and equipment. The price point is a drawback. Another drawback is the throughput of people. The Vicon system is not practical for the average training session. There is a need for a system that has a high throughput rate allowing sports teams, professionals, and athletes to receive helpful real-time feedback and correction whilst performing an exercise.
+
+This study is motivated by the distinct lack of accurate low-cost, multiview markerless 3D human pose estimation systems in the gym context. There are a few concepts of AI personal trainers and gym assistant technologies \cite{Fieraru2021, appiah2024mobile, Chen2020, Dedhia2023}. Many of these systems are single view, remain as a concept and do not offer metric reporting. They lack the true angles and 3D pose estimation reconstruction that would offer sufficient metric reporting that a specialist could analyse and draw meaningful insights from.
+The desire for this system in addition to high throughput and being low cost is to aid in injury prevention and to assist a SNC coach in assessing athletes' performances. This could greatly reduce the contact time required and allow for ad-hoc coaching. Athletes could obtain real-time form correction. This allows for athlete's to adjust their form and prevent injury as they continue to workout. The metrics used to calculate and provide form feedback can be stored and compiled into a report for future analysis. Coaches can receive both a report containing the athletes metrics and the video footage of the athlete's workout. This allows coaches to tailor an athlete's training program. This aids in the attempt to avoid over-training and injuries whilst aiming to strengthen identified weaknesses.
+The capturing of biomechanical metrics such as joint angles and body alignment variables is important when assessing for optimal movement and technique. 3D human pose estimation is able to accurately deduce joint and limb positions. 3D human pose estimation addresses the limitations of 2D methods such as occlusion and therefore enhances robustness and precision \cite{Sun2025}.
+This displays the need for 3D human pose estimation and not just 2D. Specialists can use this data to apply evidence-based exercises in training. 
+
+This research project builds upon the project done by \citet{steyn2024markerless}.
+The system developed by \citet{steyn2024markerless} demonstrated the feasibility of a real-time multiview markerless 3D human pose estimation system providing form feedback. The multview markerless 3D human pose estimation system made use of 3 calibrated camera's and off-the-shelf pose estimation libraries. The key points predicted from the 3 views were triangulated and displayed in Unity. Unity illustrated the form and exercise specific metrics through an on screen feedback-menu. This research is the natural continuation of the research by \citet{steyn2024markerless}. Identifying possible future work, \citet{steyn2024markerless} recommended the following areas: auto-calibration, action recognition, historical biomechanical data and reporting, improved accuracy and speed of 2D pose estimation, and application-specific research. 
+This research looks to take this work further by specifically focusing on improving accuracy, incorporating historical biomechanical data and detailed reporting, and implementing action recognition.
+
+\mysection{Problem Statement}{Problem Statement}
+\label{sec:problemstatement}
+
+The problem is that there is a distinct lack of inexpensive multiview markerless 3D human pose estimation systems that simultaneously meet the following needs: low cost system lowering the barrier to accessibility, usable in low-resource contexts such as a gym opposed to being confined to the laboratory, capable of providing real-time 3D biomechanical feedback, and able to generate reports for ad-hoc use. Therefore due to the high cost of existing systems, the time consuming nature of marker-based systems and the early stage of systems demonstrating the feasibility of a system that meets the aforementioned criteria there is a need for a system that can effectively address all these problems.
+
+
+%  Low in cost. Systems that are low in cost removing the entry barrier to access to these systems. Low resource Systems that can function and in a low resource context such as a typical gym opposed to the lab environment. Real-time form feedback on athlete biomechanics in 3D that can provide immediate actionable steps to improve form. Adhoc reports generated for a specialist to analyse and assist in athlete management.
+
+% Whilst a system like Vicon offers high-accuracy and excellent reporting the cost is high. 
+% Currently there is no system that is inexpensive and that meets all of these objectives.
+% Due to the expense of existing systems creating a barrier to entry for the general public, specialists and athletes to 3D biomechanical assessment, the time consuming nature of marker base systems requiring the accurate placement of markers which limit the number of athlete's able to get through the system abd the infancy of systems demonstrating the feasibility of a realtime multiview markerless 3D human pose estimation systems that can give form feedback there is a need for a system that can address and solve these problems.
+
+% Leading 3D motion capture systems are expensive creating a barrier to entry for the general public, specialists and athletes to 3D biomechanical assessment. This research aims to create a multi-angle camera system that can provide real-time form correction to assist people in the gym and to give a report with metrics to be used by a specialists.
+
+
+
+% The cost of proprietary systems are high as millions of dollars have been invested into these systems and the technology used. This is a large barrier for the athletes to access this technology. 
+ 
+% Proof of concept realtime multiview markerless 3D human pose estimation systems exist but an end-to-end system that's low in cost and ready to use in the gym context does not exist as of yet. For this reason the first objective is \textbf{O1: To develop a low cost multiview markerless 3D human pose estimation system to give real-time form correction in the gym context}.
+
+% Vicon has a limited throughput rate as they require the placement of markers and are often confined to the laboratory. This limits the number of people that can make use of these specialised systems. A markerless system should enable an entire team of athletes to use a system without the need for each individual to have markers placed on them. For this reason the second objective is \textbf{O2: To develop a system that is easily calibrated and allow for an athlete to commence their workout without further setup required}.
+ 
+% Expensive marker based proprietary systems require a specialist to assist in setting up markers on the athlete. If we can free the specialist by providing real-time feedback to the athlete and compile the metrics into a presentable format for the specialist it gives them more time to spend on analysis or creating new programmes structured around the data they are receiving. For this reason the third objective is \textbf{O3: To develop a system that can compile an athlete report with the necessary metrics that are of interest to the specialist}.
+
+% To conclude the problem statement can be expressed as follows:
+% Leading 3D motion capture systems are expensive creating a barrier to entry for the general public, specialists and athletes to 3D biomechanical assessment. This research aims to create a low cost multi-view camera system that can provide real-time form correction to assist people in the gym and to give specialists a report with biomechanical metrics of interest to aid them in their analysis.
+
+ % There is a need for a low cost multi-view markerless pose estimation system that can give real-time feedback to athletes and fitness enthusiasts. The metrics and be processed and presented to a specialist. This potentially maximises the workout performance and minimises the risk of injury. It saves the time of a specialist who can't be in multiple places at once and to have the system generate valuable feedback for the specialists.
+
+% The Objectives of this research can be further broken down into the following research objectives:
+
+\subsection{Research Aims and Objectives}
+\label{sec:researchaimsandobjectives}
+
+This research aims to create a low cost multiview markerless 3D human pose estimation capable of real-time form feedback and report generation for adhoc usage by a specialist on an athlete to athlete basis.
+
+This section breaks down the research aim into a list of objectives namely:
+
+\begin{enumerate}
+    \item \textbf{Objective 1: To develop a low cost multi-view camera system}
+        \begin{enumerate}
+            \item Investigate the optimal number of cameras required for this system. Trading off cost per camera, quality and real-time processing requirements.
+            \item Test different camera layouts around the subject and calculate the inference time for various camera configurations and some metric to compare layouts before making an informed decision on an ideal setup.
+        \end{enumerate}
+    
+    \item \textbf{Objective 2: To develop a system that is easily calibrated and allow for an athlete to commence their workout without further setup required}
+        \begin{enumerate}
+            \item Investigate calibration techniques and identify a suitable calibration process for the cameras in the identified setup. Implement the calibration technique to best pair and calibrate each of the camera's in the system.
+            \item Streamline the calibration process so that minimal user action is required. This means the least amount of action required from the user to get the system calibrated and functioning.
+            \item Identify suitable methods to guide the user through the minimum and mandatory calibration of the system.
+            \item Implement a calibration metric to see if recalibration is required.
+        \end{enumerate}
+        
+    \item \textbf{Objective 3: To develop a system that can provide real-time 3D biomechanical feedback}
+        \begin{enumerate}
+            \item Make a well informed decision on a suitable pose estimation machine learning model for real-time feedback. It should have a low inference time and good accuracy in comparision to other models being considered. 
+            \item Train the identified pose estimation model on the SUMediPose dataset. It is a dataset that is anatomically accurate. Then train the model on a varying number of keypoints. Compare how  up the model performs when trained on varying number of keypoints. That is to compare inference times and accuracy. Make an informed decision on the optimal number of keypoints to include so that inference time allows for real-time feedback.
+            \item Consider the metrics used by \citet{steyn2024markerless} and consult literature for advances in biomechanical metric definitions to make suitable biomechanical calculations.
+            \item Implement exercise identification for repetition tracking and suitable form feedback.
+            \item Identify an implement appropriate means to give real-time biomechanical feedback to an athlete. This might be in the forms of on-screen feedback and natural language.
+        \end{enumerate}
+        
+    \item \textbf{Objective 4: To develop a system that can compile an athlete report with the necessary metrics that are of interest to the specialist}
+        \begin{enumerate}
+            \item Use the identified well-defined metrics of importance as input data for the report.
+            \item Take note of highly accurate models that are not suitable for real-time inference but that could potentially be used for post-processing and reporting metrics. Make a comparision between the chosen real-time inference model and the one not suitable for real-time inference to see if post processing yields an improvement in accuracy and if there's enough of an improvement to warrant the implementation of post processing for each athlete's workout and exercise. 
+            \item Identify and Implement a sufficient method to generate reports for specialists. This might involve speaking to fellow researchers at Stellenbosch as to how they presently write reports or have reports generated in their research.
+            \item Identify and Implement an appropriate storage solution for the data (metrics, reports, video data and athlete data) and provide a means for a specialist to access the data. The specialist can use the data for performing analysis or recall in an athlete's consultation. The data could also form part of a pipeline for training new models.
+        \end{enumerate}
+\end{enumerate}
+
+\mysection{Summary of work and contributions}{Summary of work and contributions}
+\label{sec:summaryofworkandcontributions}
+\mysection{Thesis overview}{Thesis Overview}
+\label{sec:overview}
