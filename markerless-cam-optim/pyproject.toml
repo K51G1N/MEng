@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "optimize_cameras"
+version = "0.1.0"
+description = "A CLI tool for optimizing markerless motion capture camera arrays."
+requires-python = ">=3.9"
+dependencies = [
+    "scipy",        # For Differential Evolution
+    "numpy",
+    "opencv-python",
+    "ultralytics",
+    "torch",
+    "python-dotenv"
+]
+
+[tool.setuptools]
+packages = ["optimize_cameras"]
+
+[project.scripts]
+optimize-cameras = "optimize_cameras.cli:main"

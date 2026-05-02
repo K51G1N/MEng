@@ -1,0 +1,18 @@
+[
+  {
+    "subject": "S2",
+    "age": 22,
+    "sex": "female",
+    "skintone_scale": 3,
+    "weight": 61,
+    "height": 170,
+    "weights_hours": 3,
+    "cardio_hours": 3,
+    "work_intensity": "High",
+    "clothing_path": "D:\\MEng\\BEDLAM2\\bedlam_smplx_textures_clothing\\smplx_textures_clothing_2048_20220905a\\rp_emma_posed_002_texture_22.png",
+    "texture_path": "D:\\MEng\\BEDLAM2\\bedlam2_body_textures_meshcapade\\bald\\skin_f_seasian_02b_ALB.png",
+    "subject_animation_folder" : "D:\\sumedi_results\\sumedi_npz_animate_rectified\\S2",
+    "animation_path": "D:\\sumedi_results\\sumedi_npz_animate_rectified\\S2\\three_rectified.npz",
+    "camera_info_path": "C:\\Users\\20716400\\Documents\\BlenderProjects\\camera_info.json"
+  }
+]

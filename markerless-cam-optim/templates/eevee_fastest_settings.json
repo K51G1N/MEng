@@ -1,0 +1,9 @@
+{
+    "taa_render_samples": 8,
+    "use_gtao": false,
+    "use_raytracing": false,
+    "use_volumetric_shadows": false,
+    "shadow_ray_count": 2,
+    "shadow_step_count": 32,
+    "light_threshold": 0.05
+}

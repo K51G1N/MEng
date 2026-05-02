@@ -1,0 +1,71 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.pdf
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.nlo
+*.nls
+*.ilg
+
+# OS-specific junk
+Thumbs.db
+.DS_Store
+
+# Python junk
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.egg-info/
+.installed.cfg
+*.egg
+build/
+dist/
+
+# Blender junk
+*.blend
+*.blend1
+*.blend2
+*.blend3
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+
+# Environment files
+.env
+
+# Project specific outputs/temp
+**/my_run/
+**/demo_run/
+**/tes/
+**/test_speed_render_c/
+**/runs/
+**/videos/
+**/renders/
+**/inference/
+
+# Archives
+*.zip
+*.tar.gz
+*.rar

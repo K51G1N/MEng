@@ -1,0 +1,7 @@
+{
+    "taa_render_samples": 16,
+    "use_gtao": false,
+    "use_raytracing": false,
+    "shadow_ray_count": 4,
+    "shadow_step_count": 64
+}

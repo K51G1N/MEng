@@ -1,0 +1,200 @@
+[
+    {
+        "0": {
+            "camera_name": "Camera0",
+            "location": [
+                2.4492935982947064e-16,
+                4.0,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                180
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    },
+    {
+        "1": {
+            "camera_name": "Camera1",
+            "location": [
+                3.464101615137755,
+                1.9999999999999998,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                120
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    },
+    {
+        "2": {
+            "camera_name": "Camera2",
+            "location": [
+                3.464101615137755,
+                -1.9999999999999998,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                60
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    },
+    {
+        "3": {
+            "camera_name": "Camera3",
+            "location": [
+                2.4492935982947064e-16,
+                -4.0,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                0
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    },
+    {
+        "4": {
+            "camera_name": "Camera4",
+            "location": [
+                -3.464101615137755,
+                -1.9999999999999998,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                -60
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    },
+    {
+        "5": {
+            "camera_name": "Camera5",
+            "location": [
+                -3.4641016151377544,
+                2.0000000000000004,
+                1.0
+            ],
+            "rotation_degrees": [
+                90,
+                0,
+                -120
+            ],
+            "parameters": {
+                "hardware": {
+                    "sensor": "IMX708",
+                    "sensor_width_mm": 3.6288,
+                    "sensor_height_mm": 6.4512,
+                    "focal_length_mm": 4.74
+                },
+                "intrinsics": {
+                    "resolution": [
+                        480,
+                        640
+                    ],
+                    "fx": 1410.71,
+                    "fy": 1410.71,
+                    "cx": 540.0,
+                    "cy": 960.0
+                }
+            }
+        }
+    }
+]
