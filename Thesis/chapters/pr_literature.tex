@@ -4,15 +4,39 @@
 This chapter gives an overview of key concepts that are essential to understanding this research and necessary to accomplish the objectives setout in the previous chapter. Firstly stereocalibration is looked into for camera calibration. Triangulation for converting 2D to 3D allowing for 3D human pose estimation. A review of human pose estimation comprising of marker and markerless pose estimation systems and algorithms. Biomechanics is reviewed and how the human form is evaluated. Lastly we look at modern day report and document generation techniques.
 All of these aforementioned topics are brought together in light of the project at hand and how they will each aid in solving the objectives.
 
+\section{Optimal Camera Placement}
+
+Configuring the layout of cameras for a system of cameras is known as photogrametry network design (PND) or Camera Network Design. The question of optimal camera placement comes down to the intent and purpose of the network. 
+The intent and purpose for cameras placed in this network is for accurate 3D markerless human pose estimation. 
+In markerless motion capture the placement of cameras in the network can have significant impact on the overall accuracy of the system \cite{brown2022where}
+In general setting up a network of cameras can be time consuming requiring careful consideration and specific skills to setup, configure and calibrate for the appropriate use. 
+The point of the network for our purposes is for accurate reconstruction of 2D infered keypoints from some Human Pose Estimation model. Three Dimensional measurements can be recovered from A
+multi-camera network by means of triangulation \cite{olague2001applications-f89, rahimian2016optimal}. For triangulation to take place the point in question must be at least 
+visible in two camera views in the network for it to be considered triangulable. Triangulation accuracy is heavily correlated to the placement of cameras namely their orientation and position.
+Being able to optimal configure the camera network will significantly improve the performance of the multi-camera network as it leads to improved triangulation accuracy.
+A poor camera configuration might result in low quality capture s for 3D estimation and thus hamper the ability to efficiently track a point of interest \cite{rahimian2016optimal}.
+Naturally optimising the placement of the cameras leads to better quality images for the purpose of motion capture. Having the cameras optimally configured allows for better quality
+data to be fed to the system, leading to high-accuracy pose estimation and further on high quality triangulation.
+It is the purpose of this research to find optimal camera placement for a multi-camera 3D markerless pose estimation system. This should lead to improved accuracy of the system
+without having to retrain and fine tune pose estimation algorithms although valid approaches to overall system improvement.
+
+Given that we have a continous search space and many degrees of freedom for the camera network design it is not practical to physically setup, configure and calibrate the multi-camera network.
+To address this limitation we turn to a simulation based environment to assist us in exploring the continous search space without having to physically setup and calibrate a network of cameras for 
+every proposed camera network design.
+
 \section{Synthetic Data}
+
+With the modern accelration of GPU computer power and high-fidelity computer graphics, researches have turned to Digital Content Creation (DCC) engine's for the purpose of 
+creating synthetic data to supplement the training of their models. Synthetic Data offers researchers the ability to address the limitations of real imagery and address the privacy
+concerns 
+Many Synthetic Datasets exist \cite{black2023bedlamsyntheticdatasetbodies} 
+
 
 \subsection{Human Body Models}
 representing the human body is an important aspect of 
 
 \subsubsection{SMPL}
 
-SMPL (A Skinned Multi-Person Linear Model) is a learned model of the human body shape and posedependent shape variation \citet{loper2015smpl}.
-This is a human body model 
 
 \subsection{SMPL-X}
 
@@ -43,7 +67,7 @@ This is a human body model
 
 We have two kinds of pose estimation we have bottom up and a top down.
 The top down approach identifies the humans and then identifies the keypoints of each human.
-The bottom up approach identifies all keypoints and then identifies which human pose it belongs to.
+The bottom up approach identifies all keypoints and then identifies which human pose the keypoint belongs to.
 
 \subsection{Marker Pose Estimation}
 \subsection{Markerless Pose Estimation}
@@ -123,6 +147,47 @@ this is a valuable contribution to hpe field and future work relying on HPE mode
 \section{New Direction}
 
 I have embarked on a journey of trying to create or modify existing data generation 
+
+We have been working on creating a realistic synthetic data set for the purpose of testing camera configurations in order to
+find the optimal camaera configuration for human pose estimation. 
+We have utilised the original .c3d mocap data that generated the .json mocap data published on the harvard dataverse. 
+We initially attempted to utilise the .json files converting them to .c3d. We then used the SOMA pipeline to solve for SMPL bodies
+to fit the mocap data however it was found that the solver would jump iratically and one would obtain deformations. See appendix
+
+We then decided that we would work on the original .c3d processed data instead. This .c3d file came with multiple uncessary markers 
+and joint centre locations and non-surface markers. Trying to process all of these markers and fitting them to the 89 markerset does not work.
+What happens is it tries to ensure that some jc data locations appear on the surface and you end up with under-inflation of the lower-limbs.
+We inspected exactly what markers we wanted to take forward for the SOMA solver on our custom markerset layout derived from the plug-in-gate model.
+This leads to better solves for the human shape see a comparison of the figures between fig 1 and fig 2 underfit and better fitting.
+
+With motion retargetting from one rig to another if there is a height difference artefacts such as foot skating might creep in to the data.
+Since SUMediPose has data ranging from subjects with heights 158-193cm this gave us a sufficient initial testing range.
+
+It was decided that for our synthetic dataset we would try represent the extremes and the centres well
+We created a set of 18 humans, 9 males, 9 females. Then each 9 had the 3x3 permutation of Short Medium Tall with Underweight, Normal Weight and overweight.
+This gives the cameras and the inference models variability such that we do not only test on one type or gender. To further 
+test this processing random application of a uniform selection across the from the BEDLAM2.0 textures from Meshcapade were utilised as to minimise racial bias and equal 
+representation was used we random sampled which of the people was used from the race but we decided
+
+It was calculated that the average height for medium would be 170cm and that short and tall would be the min and max heights iof 
+the data namely 158 and 193. We want to minimise foot skating when we repurpose the animation data fact
+
+In using the SOMA solver we ended up with .pkl files and .npz files that can be used in conjunction with the SMPL-X Blender addon
+This allows us to reuse motion data of each of the three subjects namely S14, S3 and S14 short, medium and tall respectively onto
+each of the 9 male female underweight, normal weight and overweight.
+
+We utilised inverse kinematics to stitch the animation motion data files together to create an animation loop.
+We exported these humans performing their exercises into CLO3D and used the PythonAPI integration to give them a basic
+shirt and pants. we then solved for the clothing physics based off of these 18 humans. 
+We then exported the clothing to Blender where it would move independently but precalcualted and attached to theh uman
+
+we then decided that the IK data is not data we were interested in and only intereseted in frames that were un touched 
+from the stitching. We are also utilising an ootb model that is not time series so it does not matter in which order the model
+sees the frames only that it's able to infer the joint locations and that for that captured frame fundamentally we have a ground-truth approximation.
+Along with the actual vicon data for the joint centres.
+
+According to the SKintoSkel paper the SMPL-X is not a biomechanically accurate model. We decided that we would convert from
+the SMPL underlying skeleton and transfer it to be a SKEL model with more realistic joint locations. This serves as our "ground truth"
 
 
 \label{sec:relatedwork}
