@@ -69,3 +69,12 @@ dist/
 *.zip
 *.tar.gz
 *.rar
+
+# Ignore everything in this repository
+/*
+
+# Except the Thesis folder
+!/Thesis/
+
+# Except this .gitignore file (so it can be tracked)
+!.gitignore

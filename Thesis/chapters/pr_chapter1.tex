@@ -14,13 +14,30 @@ To address this, 3D motion capture systems like Vicon are considered the``gold s
 However, these systems are prohibitively expensive, require controlled laboratory environments, and necessitate time-consuming marker placement by trained professionals \cite{mercadal2024exercise,kuster2016accuracy}.
 Markerless Pose Estimation (MPE) offers a compelling alternative, yet a critical gap exists in the availability of inexpensive multiview markerless 3D human pose estimation (MMPE) systems that simultaneously meet the following needs: a low-cost system, lowering the barrier to accessibility, and usability in low-resource contexts as opposed to being confined to a laboratory environment 
 
-MMPE systems are comprised of four main components \cite{colyer2018review}:
-\begin{enumerate}
-    \item Cameras (Configuration and Calibration)
-    \item 3D Skeletal and Shape Model
-    \item Image Features
-    \item An Algorithm used to determine attributes such as shape, pose, and position of the model.
-\end{enumerate}
+MMPE can be broken into two main layers \cite{wade2022applications}:
+    \begin{enumerate}
+        \item Software layer
+        \item Hardware layer
+    \end{enumerate}
+
+\subsection{Software Layer}
+
+The software layer is the processing of the captured image data. This will involve 
+The software layer has expanded to envelope some previously separable 
+\citet{colyer2018review} stated there are four main components however with the advancements in the field the image features, pose
+estimation algorithms and 3D skeletal models have been absorbed into the software layer. Modern CNN's
+is being handled by the Algorithm, CNN architecture and thus falls into the software layers.
+
+\subsection{Hardware Layer}
+
+The hardware layer are the physical components used in motion capture systems. with the capture devices and the support thereof. Markerless pose estimation is can either be monocular
+or multi-camera. 
+% \begin{enumerate}
+%     \item Cameras (Configuration and Calibration)
+%     \item 3D Skeletal and Shape Model
+%     \item Image Features
+%     \item An Algorithm used to determine attributes such as shape, pose, and position of the model.
+% \end{enumerate}
 
 Cameras underpin every aspect of the system, and the quality of the results of a MMPE system is largely dependent on the configuration and number of cameras used \cite{rahimian2016optimal}. 
 Markerless motion capture relies heavily on the quality, position and orientation of the cameras. The extent to which camera setups affect the accuracy and reliability of a markerless motion capture system is an understudied problem \cite{kwak2025assessing}.
