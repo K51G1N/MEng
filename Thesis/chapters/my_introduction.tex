@@ -36,11 +36,11 @@ Simulation-based approaches utilising synthetic data have numerous benefits over
 However whilst the simulation-based approach eliminates the physical constraints of real world, evaluating a continuous search space by rendering multi-camera configurations in a loop remains computationally unfeasible \cite{jorgensen2018simulation}. To resolve this computational bottleneck the continous search space can be discretised by pre-rendering a dense network of $N$ candidate cameras surrounding the subject. This confines rendering to an upfront computational cost that is indepenedent of the number of configurations evaluated. The discretisation of the search space makes this a combinatorial subset selection problem. The objective shifts to finding the optimal fixed-size subset of $k$ cameras from the broader set of $N$ cameras.
 Even though the search space is restricted the number of possible combinations remains large. Evaluating countless multi-camera configurations requires a formalised optimisation approach. This forumlation motivates the use of a discrete computational intelligence algorithms capable of maintaining a fixed-subset selection of camera's. 
 
+
 %such as Fuzzy Particle Swarm Optimisation (FPSO) or Fuzzy Evolution Particle Swarm Optimisation (FEPSO) \cite{khan2012fuzzy,mohiuddin2016fuzzy} are required  to effectively explore the search space by proposing and evaluating camera configurations from the rendered synthetic data.
 
 % This research is motivated by the desire to improve markerless pose estimation systems and seeing widespread adoption and accessibility of this technology without being constrained to a laboratory requiring highly trained specialists. We desire that through means of simulation-based exploration understanding of optimal camera configurations for markerless systems
 % We wmat to better understand multi-camera setups and if some views are prefered over others.
-
 
 
 \subsection{Problem Statement}
@@ -53,6 +53,8 @@ We
 
 Markerless pose estimation systems offer a number of benefits when comapred to maarker-based pose estimation systems. Multi-view markerless pose estimation systems rely on multi-camera configurations. Cameras influence the performance of markerless pose estimation systems but little is understood about the characterisation of these layouts.. hwoever little is known about camera configuration influences the performance of the system. The space in which to setup cameras is continous. It is infeasible to physically setup, calibrate and test every configuration. This motivates a simulation-based approach that allows for more configurations to be tested. Despite the simulation environment the search space is still a continous space and requires discretisation to make it feasible to search. The problem then becomes a combinatorial subset selection problem that seeks to find the best subset. With the growth of synthetic datasets this research seeks to use computer generator data as the test data on which camera configurations will be evaluated. This allows for repeatability of experiments and mimising the variables that can change. This research motivated to better understand camera configurations to efficiently evaluate and explroe the search space and efficient optimsation based approach is required.
 
+
+Markerless pose estimation offers solutions to the drawbacks of markerbased systems. Marker-less pose estimation systems have not seen widespread adoption due to constraints such as accuracy of hipjoints despite showing promise for lower-limb analysis and kinematics. Further research is required to improve markerless pose estimation systems. A major component of Multiview markerless pose estimation systems are the optical cameras that capture a subjects motion sequence. Cameras and camera placement influence the accuracy of the system. However litle is understood about optimal camera configurations and setups. Physically testing and validating real-world configurations is time-consuming and infeasible as the space is a continous one with many variables that can vary between setup to setup. 
 \subsection{Research Aims and Objectives}
 \label{sec:researchaimsandobjectives}
 
