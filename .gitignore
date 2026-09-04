@@ -76,5 +76,9 @@ dist/
 # Except the Thesis folder
 !/Thesis/
 
+# Except the Code folder
+!/Code/
+!/Code/Inference/
+
 # Except this .gitignore file (so it can be tracked)
 !.gitignore

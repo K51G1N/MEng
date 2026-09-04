@@ -130,6 +130,8 @@ Once we had procured human motion data in a sufficient format the next step is a
 
 After contacting the authors, \citet{schreuder2025sumedipose}, of the SUMediPose dataset. This motion capture data is of particular itnerest for the medical and sports contexts. 
 \section{SOMA/MoSh++}
+
+
 \section{Meshcapade Bedlam 2.0}
 
 Bedlam 2.0 made available a number of textures and materials from their B2 dataset. This included 100 Meshcapade skintextures comprised of 7 ethnicities, 50 female, 50 male, minimal clothing using a bald head scalp. In addition we used the clothing overlay textures. 
@@ -163,10 +165,35 @@ The dome fishbowl configuration starts with a total number of cameras how many l
 
 Then based on the camera dome configuration each ring has a unique minimum safe distance that it can be placed from the action volume. This minimum safe disstance is calculated uisng the action volume and a binary search the camera placement is checked for validity using trignometric field of view calculations. Then for every ring in the camer configuration the are placed such that they look inward toward the origin and at a z-height of 1.5m fixed. This allows some padding and that if the subject jumps with the fov that equates to a max height of [insert: do calculation] with some padding for our subjects.
 
+Images of the camera layout can be seen here [insert cameralayout diagram and maps]
 
+We chose vertical, portrait orientations as we wanted to get the cameras as close to the subject as possible instead of being limited by a shorter fov in a landscape orientation.
 
 \section{Rendering}
 
+We used EEVEE rendering withing Blender environment due to the trade off between realism and render time when compared to render times for Cycles rendering. 
+We went frame by frame and camera by camera and subject by subject such that each camera would render out frame 0 for all subjects before going on to the next camera.
+We used a Volume Light Probe to assist with light calculations to save on rendering time.
 
+We used a clean render environment stripped down from a BlendKit environment. Constructed and adjusted to be as simple as possible for the base calculation.
+
+we rendered out at a sub sampling of every second frame to both save time on rendering as this gives sufficient information and representation of the motion being performed
 \section{Inference}
+
+Inference there are many pose estimation algorithms to work with ViTPose, HRnet, OpenPose, YoloPose, MediaPipe.  
 \section{FEPSO}
+
+Fuzzy Evolution Particle Swarm Optimisation is an algorithm inspired by the continuous PSO. This is a fixed set-size optimisation algorithm. This caters to the extact needs of the current system by ensuring that particle sizes are fixed in size. We are seeking to find the best
+
+Unlick FPSO which randomly discards cameras from a set this employs SimE which utilises a goodness and bias function. The goodness is a measure of how good a particular camera is for the set, the bias factor is how likely it is to drop or keep a camera in a particular particles set going on to the next iteration of exploration.
+FEPSO utilises social and cognitive parameters. The cognitive parameter is how likely it will explore the space in where the social parameter is the models ability or likelyhood of exploiting existing regions of the solution space that it has traveresed.
+
+Like most optimisation algorithms one needs to define an objective function. In our case we are trying to minimise the mean per joint position error. In addition to trying to minimise the MPJPE we want to use the standard deviation of the MPJPE, an indicator of how consistent the algorithm was favouring low-mpjpe scoring and consistent camera configurations.
+
+How might one define a cameras goodness? Well MPJPE error is usually a result of two break downs, 1. A missing keypoint from the view and 2. A the triangulability of the keypoint. So we want to ensure that a camera is both triangulable, meaning it's visible in at least two views. 
+We decide to implement a $$g = c_ij * mu_geo$$ where theta is the such that the score is high for values in the region 40-140 and lower otherwise as the error so it's exponential decay
+
+$$1/e^(theta-90/2*alpha)$$ as an exponential decay 
+
+We multiply it by the algorithms confidence score as a measure that we want cameras that are both triangulable as well as high levels of confidence for the keypoints.
+This way we measure the goodness of cameras highly if they are both triangulable and confident in the keypoint it is looking at 

@@ -1,0 +1,25 @@
+name: mmpose_gpu
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch=2.1.2
+  - torchvision=0.16.2
+  - torchaudio=2.1.2
+  - pytorch-cuda=12.1
+  - pip
+  - pip:
+    - numpy==1.26.4
+    - opencv-python==4.9.0.80
+    - ultralytics
+    - openmim
+    - setuptools==60.2.0
+    - pycocotools==2.0.11
+    - xtcocotools==1.14.3
+    # Use MIM inside a post-install hook to install openmmlab packages, or pip install them directly:
+    - mmdet==3.2.0
+    - mmcv==2.1.0
+    - mmpretrain==1.2.0
+    - mmpose==1.3.2
