@@ -46,15 +46,32 @@ Even though the search space is restricted the number of possible combinations r
 \subsection{Problem Statement}
 \label{sec:problemstatement}
 
+%Trial -1
 Multi-view markerless pose estimation systems rely on multiple camera views. These camera views then employ a human pose estimation algorithm to reconstruct the human pose. 
 It is clear that cameras influence the performance of markerless pose estimation systems however very little is known about how the camera configuration influences the performance. 
 We
 % While multi-view Markerless 3D Pose Estimation (MMPE) systems offer a compelling non-invasive alternative to traditional marker-based motion capture, the quality of their results is critically dependent on camera configuration. Determining the ideal configuration in the real world is impractical; as the search space is continuous and real-world testing requires time-consuming recalibration for every combinatorial variation. Without finding out optimal camera configurations multi-view markerless pose estimation systems remain sensitive to environmental factors and are prone to suboptimal configuration. This compromises system accuracy, rendering the results less reliable than required for widespread adoption or applications where accuracy is crucial.
 
+%Trial 0
 Markerless pose estimation systems offer a number of benefits when comapred to maarker-based pose estimation systems. Multi-view markerless pose estimation systems rely on multi-camera configurations. Cameras influence the performance of markerless pose estimation systems but little is understood about the characterisation of these layouts.. hwoever little is known about camera configuration influences the performance of the system. The space in which to setup cameras is continous. It is infeasible to physically setup, calibrate and test every configuration. This motivates a simulation-based approach that allows for more configurations to be tested. Despite the simulation environment the search space is still a continous space and requires discretisation to make it feasible to search. The problem then becomes a combinatorial subset selection problem that seeks to find the best subset. With the growth of synthetic datasets this research seeks to use computer generator data as the test data on which camera configurations will be evaluated. This allows for repeatability of experiments and mimising the variables that can change. This research motivated to better understand camera configurations to efficiently evaluate and explroe the search space and efficient optimsation based approach is required.
 
-
+%Trial 1
 Markerless pose estimation offers solutions to the drawbacks of markerbased systems. Marker-less pose estimation systems have not seen widespread adoption due to constraints such as accuracy of hipjoints despite showing promise for lower-limb analysis and kinematics. Further research is required to improve markerless pose estimation systems. A major component of Multiview markerless pose estimation systems are the optical cameras that capture a subjects motion sequence. Cameras and camera placement influence the accuracy of the system. However litle is understood about optimal camera configurations and setups. Physically testing and validating real-world configurations is time-consuming and infeasible as the space is a continous one with many variables that can vary between setup to setup. 
+
+%I think this is the strongest problem statement in the group just a bit lengthy
+Measuring human motion is of great importance to sport scientists. The lack of wide-spread use of markerless systems due to markerbased systems still having high accuracy in estimating joint angles[cite: UBC ] when compared to markerless systems and the lack of full-body agreement for full-body biomechanical evaluation.
+Camera configurations and choice of pose estimation algorithm has the ability to influence Markerless Pose Estimation Systems.
+This research seeks to better understand what are optimal camera configurations for general motion capture and action specific layouts across seven exercises and seeing if the choice of pose estimation algorithm affects an ideal camera configuration.
+ To assist in the improvement of Markerless Motion Capture Systems 
+ This research seeks to improve markerless pose estimation systems by understanding ideal camera configuration for exercise motion data and better understanding the role that human pose estimation algorithms play in the camera layout
+
+%Very rough and possibly more a literature review chapter statement
+ Present literatuer on evaluating camera placement and geometry is limited to real world setups, markerbased systems or only considering a single pose estimation algorihm.
+ This severly limits the exploration and evaluation of optimal camera configurations. It ignores the potential effects that the choice of pose estimation models have on a markerless pose estimation system.
+
+ We seek to utilise an optimisation aglorithm to minimise the mpjpe of a markeless pose estimation system by considering different camera configurations. 
+
+ Markerless pose estimation address the drawbacks of markebased systems however these systems are sensistive to camera placement and choice of pose estimation algorithm. Existing literature does not explore optimal camera placement as they either consider static setups that are potentially suboptimal, they do not consider the impact that the choice of pose estimation algorithm has on system performance. This research seeks to address this gap in literature by using a simulation based markerless pose estimation environment leveraging synthetic data and an optimisation algorithm to explore the solution space. 
 \subsection{Research Aims and Objectives}
 \label{sec:researchaimsandobjectives}
 
