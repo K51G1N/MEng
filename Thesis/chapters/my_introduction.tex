@@ -1,3 +1,4 @@
+% !TEX root = ../thesis.tex
 \renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
 \renewcommand{\labelenumiii}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
 \renewcommand{\labelenumiv}{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}.\arabic{enumiv}}
@@ -15,11 +16,13 @@ With the advancement of technology, motion capture systems have been designed an
 Optical motion capture systems can be divided into two broad categories namely marker-based and markerless motion capture.
 
 Marker-based pose estimation systems rely on the placement of reflective markers on the human body and specialised hardware to capture the human
-motion via infrared technology. Systems such as Vicon (Vicon Nexus, Vicon Motion Systems Ltd, Oxford, UK) are considered to be the industry gold standard for biomechanical applications \cite{matsuda2025reliability, hansen2024validation, song2022evolution}. However, marker-based systems have a number of drawbacks. These systems are expensive, restricted to laboratory environments, and require trained professionals knowledgeable in marker placement, system set up and calibration \cite{mercadal2024exercise,kuster2016accuracy}. Furthermore, the placement of markers can be invasive for the participants, requiring form-fitting clothing and exposed skin. These markers might affect the natural movement of the participant and their placement does not directly correspond to true anatomical joint centers as markers are used in conjunction with one another to calculate joint centres \cite{needham2021accuracy}.  
+motion via infrared technology. Systems such as Vicon (Vicon Nexus, Vicon Motion Systems Ltd, Oxford, UK) are considered to be the industry gold standard for biomechanical applications \cite{matsuda2025reliability, hansen2024validation, song2022evolution}. However, marker-based systems have a number of drawbacks. These systems are expensive, restricted to laboratory environments, and require trained professionals knowledgeable in marker placement, system set up and calibration \cite{mercadal2024exercise,kuster2016accuracy}. Furthermore, the placement of markers can be invasive for the participants, requiring form-fitting clothing and exposed skin. These markers might affect the natural movement of the participant and their placement does not directly correspond to true anatomical joint centers as markers are used in conjunction with one another to infer joint centres \cite{needham2021accuracy}.  
 %A system such as Vicon is requires careful calibration and setup making it a fairly time consuming process. Lastly  
 These drawbacks have driven the exploration of markerless motion capture systems. 
 
 Markerless pose estimation systems make use of optical capture cameras, human body models, computer vision and deep learning algorithms to capture and detect human motion \cite{colyer2018review,federolf2025validation}. They offer an attractive, non-invasive alternative to marker-based systems \cite{federolf2025validation}. Whilst markerless systems are not yet widely adopted, systems such as Theia3D (Theia Markerless Inc., Kingston, ON, Canada), have demonstrated accuracy comparable to Vicon for lower limb analysis, though further research is required to validate full-body biomechanics \cite{federolf2025validation, yang2025comparison, wren2023comparison,scataglini2024accuracy}.
+
+A comparison of human pose estimation algorithms has not been performed on multi-view markerless camera configurations. It has been cited as a potential limitation and area for future work. This presents a gap in exploring how choice of human pose estimation algorithm influences system performance and potentially choice of human pose estimation. \cite{samani2026optimizing,kim2026comparison}
 
 While multiview markerless systems offer a promising alternative to marker-based systems their success is largely dependent on the quality, orientation and position of the cameras utilised \cite{rahimian2016optimal,jorgensen2018simulation, yang2025evaluation}.    
 Literature has shown that cameras play a vital role in the success of pose estimation algorithms yet the full extent to which different configurations affect performance is not sufficiently understood \cite{kwak2025assessing}.
@@ -46,19 +49,35 @@ Even though the search space is restricted the number of possible combinations r
 \subsection{Problem Statement}
 \label{sec:problemstatement}
 
+%temp para
 Multi-view markerless pose estimation systems rely on multiple camera views. These camera views then employ a human pose estimation algorithm to reconstruct the human pose. 
 It is clear that cameras influence the performance of markerless pose estimation systems however very little is known about how the camera configuration influences the performance. 
 We
 % While multi-view Markerless 3D Pose Estimation (MMPE) systems offer a compelling non-invasive alternative to traditional marker-based motion capture, the quality of their results is critically dependent on camera configuration. Determining the ideal configuration in the real world is impractical; as the search space is continuous and real-world testing requires time-consuming recalibration for every combinatorial variation. Without finding out optimal camera configurations multi-view markerless pose estimation systems remain sensitive to environmental factors and are prone to suboptimal configuration. This compromises system accuracy, rendering the results less reliable than required for widespread adoption or applications where accuracy is crucial.
 
-Markerless pose estimation systems offer a number of benefits when comapred to maarker-based pose estimation systems. Multi-view markerless pose estimation systems rely on multi-camera configurations. Cameras influence the performance of markerless pose estimation systems but little is understood about the characterisation of these layouts.. hwoever little is known about camera configuration influences the performance of the system. The space in which to setup cameras is continous. It is infeasible to physically setup, calibrate and test every configuration. This motivates a simulation-based approach that allows for more configurations to be tested. Despite the simulation environment the search space is still a continous space and requires discretisation to make it feasible to search. The problem then becomes a combinatorial subset selection problem that seeks to find the best subset. With the growth of synthetic datasets this research seeks to use computer generator data as the test data on which camera configurations will be evaluated. This allows for repeatability of experiments and mimising the variables that can change. This research motivated to better understand camera configurations to efficiently evaluate and explroe the search space and efficient optimsation based approach is required.
+%temp para
+Markerless pose estimation systems offer a number of benefits when comred to maarker-based pose estimation systems. Multi-view markerless pose estimation systems rely on multi-camera configurations. Cameras influence the performance of markerless pose estimation systems but little is understood about the characterisation of these layouts.. hwoever little is known about camera configuration influences the performance of the system. The space in which to setup cameras is continous. It is infeasible to physically setup, calibrate and test every configuration. This motivates a simulation-based approach that allows for more configurations to be tested. Despite the simulation environment the search space is still a continous space and requires discretisation to make it feasible to search. The problem then becomes a combinatorial subset selection problem that seeks to find the best subset. With the growth of synthetic datasets this research seeks to use computer generator data as the test data on which camera configurations will be evaluated. This allows for repeatability of experiments and mimising the variables that can change. This research motivated to better understand camera configurations to efficiently evaluate and explroe the search space and efficient optimsation based approach is required.
 
-
-Markerless pose estimation offers solutions to the drawbacks of markerbased systems. Marker-less pose estimation systems have not seen widespread adoption due to constraints such as accuracy of hipjoints despite showing promise for lower-limb analysis and kinematics. Further research is required to improve markerless pose estimation systems. A major component of Multiview markerless pose estimation systems are the optical cameras that capture a subjects motion sequence. Cameras and camera placement influence the accuracy of the system. However litle is understood about optimal camera configurations and setups. Physically testing and validating real-world configurations is time-consuming and infeasible as the space is a continous one with many variables that can vary between setup to setup. 
+Markerless pose estimation offers solutions to the drawbacks of markerbased systems. Marker-less pose estimation systems have not seen widespread adoption due to constraints such as accuracy of hipjoints despite showing promise for lower-limb analysis and kinematics. Further research is required to improve markerless pose estimation systems. A major component of Multiview markerless pose estimation systems are the optical cameras that capture a subjects motion sequence. Cameras and camera placement influence the accuracy of the system. However litle is understood about optimal camera configurations and setups. Physically testing and validating real-world configurations is time-consuming and infeasible as the space is a continous one with many variables that vary setup to setup. 
 \subsection{Research Aims and Objectives}
 \label{sec:researchaimsandobjectives}
 
 This research aims to better understand multiview markerless pose estimation systems and seek to use a simulation based approach using synthetic ground truth data and optimised computational intelligence algorithms to efficiently explore and evaluate a discretised space.
 
+This problem can be broken down into several Objectives
 
+Create a suitable and synthetic data generation pipeline for rendering out data.
+This first objective can be broken down into x distrinct chunks. 
+1. Select a suitable DCC in which renders will take place for the output of data
+2. Find and utilise a human body model to represent a human in the 3D world
+3. Obtain suitable motion data to drive the human body model
+4. Create a camera rig layout to capture and render out the animation sequence
 
+Implement and constrain a suitable optimisation algorithm to evaluate a camera configuration.
+To implement a suitable optimisation algorithm it needs to be one that can handle fixed set-sizes and have some forumlation of an objective function to measure the fitness or suitability of a camera configuration.
+This can particularly broken down further into
+1. Given this is a Combinatorial Subset selection problem finding a setbased optimisation algorithm capable of fixed set sizes is of primary importance
+2. Evaluate the camera configuration using the Mean Per Joint Position Error (MPJPE) metric along with triangulability and visibility metrics for a given sequence.
+
+This research has the objectives of setting up a synthetic data environment for rendering out images for the use of evaluation. 
+A secondary objective is 
