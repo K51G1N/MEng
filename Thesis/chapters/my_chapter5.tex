@@ -1,0 +1,133 @@
+% !TEX root = ../thesis.tex
+\mychapter{Experiments and Results}{Experiments and Results}{}
+\label{chap:results}
+% Addresses Objective 3 (O7--O8); answers Aim 1 and Aim 2
+% Reference: Code/FEPSO_RESULTS.md (weekend run, 50 restarts)
+
+\section{Experimental Design}
+\label{sec:experimentaldesign}
+% FEPSO_RESULTS.md 1
+
+\subsection{Dataset and Strata}
+% Pooled + A3--A9 (8 strata). Male/female strata were not part of the weekend grid
+
+\subsection{Experimental Grid}
+% 3 models x 8 strata x K = 2--12 = 264 cells
+
+\subsection{Optimisation Protocol}
+% K = 2 exact; K >= 3 FEPSO with restarts (Chapter~\ref{chap:optimisation})
+
+\subsection{Evaluation Metrics}
+% FEPSO.md 5.2: mpjpe_triangulable, median_triangulable, frac_unseen, frac_untriangulable,
+% mean_visible_cams, penalty_share. Quote accuracy and coverage as separate numbers.
+
+\subsection{Cross-Evaluation Protocol}
+% Planned (FEPSO_RESULTS.md 11.3)
+
+\section{Behaviour of the Optimisation}
+\label{sec:optimisationbehaviour}
+% Evidence that the search results can be trusted, before the findings that rely on them
+
+\subsection{Coverage and the Contribution of Penalties}
+% FEPSO_RESULTS.md 1
+
+\subsection{Agreement Between Restarts}
+% FEPSO_RESULTS.md 8
+
+\subsection{Flatness of the Fitness Landscape}
+% FEPSO_RESULTS.md 8
+
+\subsection{Monotonicity Across K}
+% FEPSO_RESULTS.md 9, 10
+
+\subsection{Effect of the Number of Restarts}
+% FEPSO_RESULTS.md 9: 50 versus 3 restarts
+
+\subsection{Comparison Against Exhaustive Search at K = 3}
+% Planned (FEPSO_RESULTS.md 11.1)
+
+\section{General Camera Configurations}
+\label{sec:generalconfigs}
+% FEPSO_RESULTS.md 2, 3
+
+\subsection{Accuracy Against Number of Cameras}
+
+\subsection{Diminishing Returns}
+
+\subsection{Selected Configurations}
+
+\subsection{Nesting of Optimal Sets Across K}
+% FEPSO_RESULTS.md 7
+
+\section{Effect of the Pose Estimation Model}
+\label{sec:modeleffect}
+% Aim 2, O7. FEPSO_RESULTS.md 2, 4, 5, 6
+
+\subsection{Accuracy and Consistency by Model}
+
+\subsection{Camera Preferences by Model}
+
+\subsection{Agreement Between Model Configurations}
+% Identity overlap (Jaccard) versus geometric distance between sets
+
+\subsection{Cross-Model Evaluation}
+% Planned (FEPSO_RESULTS.md 11.3)
+
+\section{Exercise-Specific Camera Configurations}
+\label{sec:exerciseconfigs}
+% Aim 1, O8. FEPSO_RESULTS.md 4, 5
+
+\subsection{Accuracy by Exercise}
+
+\subsection{Per-Exercise Optimal Configurations}
+
+\subsection{Exercises with Distinct Requirements}
+% A7 and A4
+
+\subsection{Influence of Individual Exercises on the Pooled Solution}
+
+\subsection{General Versus Exercise-Specific Configurations}
+% Planned (FEPSO_RESULTS.md 11.3)
+
+\section{Effect of Subject Sex}
+\label{sec:sexeffect}
+% Include only if the male/female strata are run
+
+\section{Characterising Optimal Configurations}
+\label{sec:characterisation}
+% FEPSO_RESULTS.md 5, 6
+
+\subsection{Camera Elevation}
+
+\subsection{Azimuthal Distribution and Uncovered Directions}
+
+\subsection{Camera Separation}
+
+\subsection{Near-Optimal Tolerance Bands}
+% FEPSO_RESULTS.md 2 (conclusion 6), 8
+
+\subsection{Practical Guidelines for Practitioners}
+
+\section{Limitations of the Results}
+\label{sec:resultslimitations}
+% FEPSO_RESULTS.md 10
+
+\subsection{Best-Case Bound}
+
+\subsection{Selection and Evaluation on the Same Frames}
+% Possible check: leave-one-subject-out (run_fepso_su_room.py --subjects)
+
+\subsection{Optimum at the Boundary of the Rig}
+
+\subsection{Near-Ties Among Found Sets Only}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Comparison with Existing Literature}
+\cite{rahimian2016optimal, jorgensen2018simulation, yang2025evaluation, kwak2025assessing, samani2026optimizing}
+
+\subsection{Implications for Markerless Motion Capture}
+
+\section{Chapter Summary}
+\label{sec:resultssummary}

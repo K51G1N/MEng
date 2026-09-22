@@ -1,0 +1,154 @@
+% !TEX root = ../thesis.tex
+\mychapter{Camera Configuration Optimisation}{Camera Configuration Optimisation}{}
+\label{chap:optimisation}
+% Addresses Objective 2 (O5--O6)
+% Reference: Code/FEPSO.md (section numbers given per subsection below)
+% Evidence that the optimiser works is in Chapter~\ref{chap:results}, since it comes from the experimental grid
+
+\section{Problem Formulation}
+\label{sec:formulation}
+% FEPSO.md 1
+
+\subsection{Camera Network Design as Subset Selection}
+\cite{olague2001applications, zhao2013approximate}
+
+\subsection{Notation and Inputs}
+
+\subsection{Size of the Search Space}
+
+\subsection{Fixed Cardinality}
+
+\subsection{Exact Enumeration for Small K}
+% K = 2 solved by enumerating all 4,950 pairs (FEPSO_RESULTS.md 1)
+
+\section{Objective Function}
+\label{sec:objectivefunction}
+% O6, FEPSO.md 2
+% Defines the fitness Phi(S) only. The goodness score that steers the search is not part of Phi(S)
+% and is defined with the search in Section~\ref{sec:fepso}.
+
+Like most optimisation algorithms one needs to define an objective function. In our case we are trying to minimise the mean per joint position error. In addition to trying to minimise the MPJPE we want to use the standard deviation of the MPJPE, an indicator of how consistent the algorithm was favouring low-mpjpe scoring and consistent camera configurations.
+
+\subsection{Joint-to-Camera Rays}
+% FEPSO.md 2.1
+
+\subsection{Convergence Angle and Fuzzy Membership}
+% FEPSO.md 2.2
+
+\subsection{Visibility Gate}
+% FEPSO.md 2.3
+
+\subsection{Triangulability Classification and Graded Penalties}
+% FEPSO.md 2.5
+
+\subsection{Confidence-Weighted Triangulation}
+% FEPSO.md 2.6
+% TODO bib: DLT / multiple view geometry (e.g. Hartley and Zisserman)
+
+\subsection{Degenerate Solutions}
+% FEPSO.md 2.6
+
+\subsection{Fitness Function}
+% FEPSO.md 2.7
+% TODO bib: MPJPE origin (e.g. Human3.6M)
+
+\subsection{Penalty Units and the Accuracy--Coverage Exchange Rate}
+% FEPSO.md 5.1
+
+\subsection{Reporting Accuracy and Coverage Separately}
+% FEPSO.md 5.2
+
+\section{Fuzzy Evolutionary Particle Swarm Optimisation}
+\label{sec:fepso}
+% O5, FEPSO.md 3
+% Suggested: \cite{eberhart1995particle, khan2012fuzzy, mohiuddin2016fuzzy, engelbrecht2007computational}
+% TODO bib: Simulated Evolution (SimE)
+
+Fuzzy Evolution Particle Swarm Optimisation is an algorithm inspired by the continuous PSO. This is a fixed set-size optimisation algorithm. This caters to the extact needs of the current system by ensuring that particle sizes are fixed in size. We are seeking to find the best
+
+\subsection{Particle Representation}
+
+\subsection{Initialisation}
+% FEPSO.md 3.1
+
+\subsection{Camera Goodness}
+% FEPSO.md 2.4
+
+How might one define a cameras goodness? Well MPJPE error is usually a result of two break downs, 1. A missing keypoint from the view and 2. A the triangulability of the keypoint. So we want to ensure that a camera is both triangulable, meaning it's visible in at least two views. 
+We decide to implement a $$g = c_ij * mu_geo$$ where theta is the such that the score is high for values in the region 40-140 and lower otherwise as the error so it's exponential decay
+
+$$1/e^(theta-90/2*alpha)$$ as an exponential decay 
+
+We multiply it by the algorithms confidence score as a measure that we want cameras that are both triangulable as well as high levels of confidence for the keypoints.
+This way we measure the goodness of cameras highly if they are both triangulable and confident in the keypoint it is looking at 
+\subsection{Properties of the Goodness Metric}
+% FEPSO.md 2.4
+
+\subsection{Cooling Bias Schedule}
+% FEPSO.md 3.2
+
+\subsection{Simulated Evolution Selection}
+% FEPSO.md 3.3
+
+Unlick FPSO which randomly discards cameras from a set this employs SimE which utilises a goodness and bias function. The goodness is a measure of how good a particular camera is for the set, the bias factor is how likely it is to drop or keep a camera in a particular particles set going on to the next iteration of exploration.
+
+\subsection{Velocity Clamp}
+% FEPSO.md 3.4
+
+\subsection{Position Update}
+% FEPSO.md 3.5
+
+\subsection{Memory Update and Stagnation}
+% FEPSO.md 3.6
+
+\subsection{Independent Restarts and the Reported Solution}
+% FEPSO_RESULTS.md 1, 9: 50 restarts per cell, lowest-fitness set reported
+
+\subsection{Relationship to Continuous Particle Swarm Optimisation}
+% FEPSO.md 3.5
+
+FEPSO utilises social and cognitive parameters. The cognitive parameter is how likely it will explore the space in where the social parameter is the models ability or likelyhood of exploiting existing regions of the solution space that it has traveresed.
+
+\subsection{Parameter Settings}
+% FEPSO.md 6. Report the values used (FEPSO_RESULTS.md 1), not the code defaults
+
+\section{Assumptions and Limitations of the Formulation}
+\label{sec:formulationlimits}
+% FEPSO.md 5.3--5.4; feeds Scope and Limitations in Chapter~\ref{chap:introduction}
+
+\subsection{Ground-Truth Geometry and the Oracle Bound}
+
+\subsection{Independent Joint-Frames}
+
+\subsection{The Convergence-Angle Gate as a Hard Prior}
+
+\subsection{Penalty Cases in the Spread Term}
+
+\subsection{Dependence on the Pose Estimation Model}
+
+\section{Implementation}
+\label{sec:fepsoimplementation}
+
+\subsection{Data Loading and Stratification}
+% ARCHITECTURE.md 7
+
+\subsection{GPU Vectorisation}
+% FEPSO.md 2
+
+\subsection{Static Ray Caching}
+% FEPSO.md 2.1, 4
+
+\subsection{Numerical Conditioning of the Triangulation}
+% FEPSO.md 2.6
+
+\subsection{Evaluation Bank}
+% FEPSO.md 4
+
+\subsection{Cache Keying}
+% FEPSO.md 4
+
+\subsection{Computational Complexity}
+% FEPSO.md 6
+
+\section{Chapter Summary}
+\label{sec:optimisationsummary}
