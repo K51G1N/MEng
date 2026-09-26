@@ -6,7 +6,7 @@
 \label{sec:relatedwork}
 
 
-Finding Optimal Camera Placement otherwise known as the photogrammetry network design problem has been a problem people have tried to solve in multiple-contexts.
+Finding Optimal Camera Placement otherwise known as the photogrammetry network design (PND) problem has been a problem people have tried to solve in multiple-contexts.
 They have ranged from optimal camera placement for industrial pose estimation to 
 There are numerous works done that utilise simulation based approaches
 
@@ -21,13 +21,13 @@ Finding optimal camera placement has been a long studied problem for various con
 They have found use cases for cases in industrial pose estimation, reconstruction of points 
 
 
-The optimal camera placement problem known in photogrammetry as the photogrammetry network design problem. \citet{grafarend1974optimization} in the context of geodetic networks setup a general network design scheme. This classified the optimisation of networks into four orders of design problems: zero order design problem, which is primarly to do with choice of coordinate system for measurements, known as the datum problem. The first order design problem is the one that persists to this day as the one most focused on and it is the configuration problem. The second order design problem is the weighting problem which asks the question \textit{what ought to be measured once an optimal camera configuration has been found}. The fourth order design problem also known as the bayesian approach or densification problem which asks the question what is the benefit of any additional measurement or observation in the network given information about the quality of the present network.
-\citet{grafarend1974optimization} states that it is impossible to optimise geodetic networks without reviewing optimisation algorithms and distinguishing between direct or simulation methods. 
-The classification scheme by \cite{grafarend1974optimization} was leveraged by professionals in the field of photogrammetry as the optimisation of a network leant itself to the optimisation of a camera network, known as multi-station photogrammetric network. 
-\citet{fraser1984network} in particular utilises the classification from \cite{grafarend1974optimization} in the optimisation of a photogrammetry multi-station network. He correctly identifies that precision is a function of the geometry of the network which is determined in the design stage of the network. He expands upon the four orders of design problems as mentioned by \cite{grafarend1974optimization} and translates them into the context of photogrammetry (camera network design). 
-\cite{fraser1984network} mentions that computer simulation has been implemented succesffully in design optimistion for photogrammetric networks. Leveraging the classification scheme from \citet{grafarend1974optimization} and puts fourth a general practical simulation procedure to implement in computure simulation network optimisation.
-
-One particular contribution of the paper by \cite{fraser1984network} is that they give a general flow of photogrammetric network design visualised in a flow chart based on their figure 3. 
+The optimal camera placement problem is known as the camera network design problem (CND) in photogrammetry. CND in photogrammetry has been a problem that has been investigated for a couple of decades. \citet{grafarend1974optimization} in the field of geodesy sought to optimise geodetic networks by generalising the optimisation concepts of \cite{helmert1924ausgleichungsrechnung} and defined a classification scheme. This classified the optimisation of networks into four orders of design problems: zero order design (ZOD) problem, which is primarly to do with choice of coordinate system for measurements, known as the datum problem. The first order design (FOD) problem is the one that persists to this day and it is the configuration problem. The second order design (SOD) problem is the weighting problem which asks the question \textit{what ought to be measured after designing an optimal configuration}. The third order design (TOD) problem also known as the bayesian approach or densification problem, which asks \textit{what is the benefit of any additional measurement or observation in the network after reasoning about the quality of the present network?}.
+\citet{grafarend1974optimization} stated that it is impossible to optimise geodetic networks without reviewing optimisation algorithms and distinguishing between direct or simulation methods. 
+The classification scheme by \cite{grafarend1974optimization} has been leveraged by professionals in the field of photogrammetry as the optimisation of a geodetic network leant itself to the optimisation of a camera network, known as multi-station photogrammetric network. 
+\citet{fraser1984network} in particular utilised the classification scheme by \cite{grafarend1974optimization} in the optimisation of a photogrammetry multi-station network. He correctly identified that precision of the network is a function of its geometry which is determined in the design stage. He expanded upon the four orders of design problems and translated them into the context of photogrammetry (camera network design). The four orders of design problems are analgous a multi-camera configuration in the following ways.
+The datum problem (ZOD) has to do with defining the world coordinate system and this is achieved by means of camera calibration. The configuration problem (FOD) has to do with the layout of the cameras in the network. The location (x, y, z) and rotation (pan, tilt and roll) of each camera. The weighting problem (SOD) has to do with the properties of the camera's such as the sensor resolution, the focal length and field of view to name a few properties. The densification problem (TOD) asks how does one improve the existing camera configuration by adding new cameras to the network.
+\cite{fraser1984network} mentioned that computer simulation has been implemented successfully in optimisation of photogrammetric network design and stated that there are a number of ways that computer simulation can be used for photogrammetric network design. Utilising the classifcation scheme by \cite{grafarend1974optimization}, \cite{fraser1984network} put forth a general method for using computer simulation in the process of photogrammetric network design optimisation.
+The general flow of photogrammetric network design can be visualised in a flow chart \ref{} based on figure 3 from the paper by \citet{mason1995expert}.
 
 % \begin{figure}[htpb]
 %     \centering
@@ -82,6 +82,10 @@ One particular contribution of the paper by \cite{fraser1984network} is that the
 %     \label{fig:network_design}
 % \end{figure}
 
+The first step is to first be clear on the precision criteria and accuracy. , this might be analogus to specifying the type of cameras to be used in the system.
+
+
+
 
 \cite{mason1995expert} implements or designs and expert system-based design the early terminology used for AI and mentions the observational redudancy, camera positioning and ray intersections for point triangulation. Expert System. 21 years on from the paper by \citet{grafarend1974optimization} the classification system is still being used to assist in photogrammetric network design however highlighting that the most complex of the design problems is the first order design, camera placement. The complexity of the problem is in the practically infinite number of camera poses even when working with a restricted environment .
 A tri
@@ -99,9 +103,9 @@ Simulation based approaches to solving the Optimal Camera placement problem, kno
 It has been noted that for an optimal multi-camera setup there ought to be focus on accuracy specifications, essentially a measure of correctness, quality of the configuration defined by precision and realiability. precision is a function of the geometry of the camera network.
 By discussing and using the classification system, \citet{fraser1984network} describes a general process by which a camera network can be optimised through computer simulation.
 Althopu
-\citet{mason1995expert} states that for a high accuracy industrial photogrammetry measurements that an appropriate multi-camera network is required. 
+\citet{mason1995expert} stated that for a high accuracy industrial photogrammetry measurements that an appropriate multi-camera network is required. 
 
-Experts have realied upon simulation based approaches to oovercome the complexity of the camera network design \cite{mason1995expert}
+Experts have relied upon simulation based approaches to overcome the complexity of the camera network design \cite{mason1995expert}
 Aspects that influence the accuracy of camera configuration considered are triangulability, where a point of interest is viewed by more than one camera, the number and position of cameras in the network and lastly the convergence and intersection of cameras for a point of interest. These all contribute to the accuracy of a multi camera network.
 \cite{tarbox1995planning} proved that the FOD problem is NP-complete meaning that it's algorithmic complexity exponential (greater than polynomial). This means that trial and error approaches, ie. bruteforcing the solution space is infeasible and a heuristic approach is required.
 \citet{mason1995expert} employs the general formulation by \cite{fraser1984network} 
