@@ -2,158 +2,177 @@
 \mychapter{Literature}{Literature}{}
 \label{chap:literature}
 
+This literature review gives a brief chronological history of camera placement optimisation before thematically evaluating and critiquing existing literature. Due to the computational complexity of the problem, existing work discretises the search space. Literature limits the number of cameras to a finite set and their possible positions. Most existing work evaluates simplified geometric criteria instead of what a real human pose estimation system would measure. These simplifications leave a gap in how best to place cameras for markerless pose estimation, which this thesis addresses.
+
 This chapter gives a broad sweeping overview of the literature that is relevant to solving the main objectives of this research
 Simulation based network design optimisation. We look at existing synthetic human datasets as a means to assist us in setting up the synthetic environment for our simulation based approach. We look to human body modeling and human mesh recovery methods that have been implemented to best represent humans in a virtual environment. Turning back to simulation based approaches we look at optimisaation algorithms that are suited to our use case in simulation based camera optimisation for multi-view markerless pose estimation 
 This chapter gives an overview and critique of the literature starting with simulation based approaches a brief chronological survey is done of the development of optimising camera network design starting with the classification scheme by \citet{grafarend1974optimization} and ending at \citet{mason1995expert}'s work in using it for photogrammetric network desing (PND). A critique on existing simulation based papers is given whilst highlighting the constraints used for the objective functions.
 
+\section{Motion Capture for Biomechanics}
 
-\section{Related Work/Simulation Based approaches}
+The principles of exercise biomechanics are rooted in human movement mechanics. It's a critical area of study for understanding how physical activity and exercise impacts the human body and health \cite{forte2023biomechanics}.
+Motion capture plays an important role in the study of biomechanics \cite{mundermann2006evolution}
+Optical motion capture is a popular method to capture and analyse movement and human biomechanics. 
+Whilst Vicon systems remain the gold-standard \cite{colyer2018review} for marker-based motion capture. In the work by \citet{chromy2025validated} they used a six-axis robotic manipulator to move a rigid marker array and reproted a tracking error of 0.65mm of the Vicon system. As shown in Chapter\ref{chap:introduction} marker-based systems have drawbacks that markerless pose estimation offers solutions to. Markerless motion capture uses standard video data and relies on deep learning human pose estimation algorithms to detect joint locations. Markerless motion capture can be divided into monocular (single camera) pose estimation  or multi-camera pose estimation. Multi-camera markerless motion capture which relies on combining multiple monocular camera views by means of reconstruction allows for 3D joint centres to be estimated and calculated allowing for 3D biomechanical analysis to be done \cite{wade2022applications}. 
+Various works have shown that markerless motion capture is nearing performance of marker-based systems for biomechanical motion capture. 
+In work done by \citet{unger2025differentiable} they showed that markerless pose estimation systems had high-levels of agreement with an optical marker-based motion capture system using Qualisys and Optitrack, showing values of RMSE of joint angles between 1-3 deg and 3mm in trunk displacement specifically in the context of arm tracking in stroke rehabilitation patients.
+\citet{outerleys2025clinical} used the TheiaMarkerless system for assessing if gait deviations associated with knee osteoarthritis could be reliably and consistently detected using markerless motion capture. Their agreement was less than RMS 3 degree which showed similar performance with the joint angle RMSE of \citet{unger2025differentiable}. The limitation of \citet{outerleys2025clinical} is the use of TheiaMarkerless a commercial system without knowledge if the results would hold true for other markerless systems for biomechanics.
+In a meta-analysis by \citet{scataglini2024accuracy} they concluded that markerless based motion capture systems could be comparable to marker-based systems in terms of accuracy, reliability and concurent validity for gait analysis. Their caveat was that for the assessment of ankle movements and transversal plane movements markerless systems were not accurate enough for clinical settings.
+Despite \citet{outerleys2025clinical} and \citet{unger2025differentiable} these have both been in clinical settings one for rehabilitation and the other for locomator, gait analysis. These differ from our desired context of improving the agreement of markerless pose estimation systems for exercise biomechanics.
+The point to the fact that in studies the camera placement varied and that the camera placement could influence accuracy, reliability and concurrent validity outcomes. If camera placement affects the agreement between marker-based and markerless systems then optimising camera placement could assist in closing the gap between the two motion capture systems.
+
+Given that markerless motion capture systems are nearing the performance of marker-based systems yet requiring further study and validation the study of optimal camera placement in the context of biomechanics and exercise movement is a valid area that could lead to further agreement between marker-based and markerless systems.
+
+\section{Human Pose Estimation}
+
+Human Pose Estimation, here on out referred to as pose estimation, is a well studied area in computer vision that aims to detect anatomical human body parts such as the joints from images and video data known as frame data \cite{zheng2023deep}.
+Human pose estimation allows for further study of the human body from the motion data and keypoint data it provides and has found applications across a broad range industries such film and television, gaming and healthcare.
+Human Pose Estimation is a complex task with many challenges such a dynamic human motion makes for a challenging task with issues such as limbs obscuring other parts of the body, known as self-occlusion, and motion blur due to rapid motion. Deep learning techniques have rapidly developed and have outperformed traditional computer vision methods due to their ability to better extract features from the image data making them suitable for the complexity of human pose estimation\cite{dang2019deep}.
+
+Modern Pose Estimation methods can be categorised into two classes, single person and multiperson detectors. Due to the complexity of the multi-person detector problem they tend to be more computationaly intensive than single person detectors which tend to be suitable for light weight and real-time applications examples of.
+For single person pose estimation methods are either regression based methods or heatmap-based methods \cite{dubey2023comprehensive}.
+For multi-person pose estimation methods are either top down or bottom up.
+
+
+We utilise the YoloPose, VitPose and HRNet algorithms on our dataset. 
+
+
+\subsection{Pose Estimation Models}
+\subsection{Top-Down and Bottom-Up Approaches}
+
+Top down human pose estimation is where the humans are identified first with bounding boxes and then in each bounding box the joints or keypoints are then located and detected with a confidence score.
+The Bottom up human pose estimation algorithms are where any and all keypoints, joint locations are identified in the scene and then they are attributed to humans.
+
+\subsection{Multi-View 3D Reconstruction}
+
+What happens here is there are u, v pixel coordinates in an image plane and the u,v coordinat corresponds to an xyz location i nthe world coordinate system. There is no way to get a u, v to a xyz in true geometric solve due to the loss of information. 
+This loss of information thererfore requires another image with the same point identified and lcoated in it's $u_1$, $v_1$ space and these cameras need to be calibrated. that means that the inrinsics and extrinsic parameters of the cameras are known. 
+Using these matrices a rotation and a translation amtrices we can convert between the four coordinate systems cameraa coordinate system, image coordinate space, world coordinate system and pixel coordinates 
+
+\subsection{Evaluation Metrics}
+
+Various evaluation metrics exist in human pose estimation these are MPJPE, PA-MPJPE and PCK amongst others. 
+The MPJPE is the mean per joint position error which is an L2 Norm of the distance between the ground truth and the infered keypoint per joint, per frame. This averages out and gives a score
+
+\section{Simulation-Based Camera Network Design}
 \label{sec:relatedwork}
+The search for optimal CND solutions was studied further by experts such as \citet{olague2002optimal}, \citet{gonzalez2009optimal}, \citet{zhao2013approximate}, \citet{rahimian2016optimal} and \citet{jorgensen2018simulation} to name a few. All the aforementioned experts agree that camera placement impacts the performance of a multi-camera network. The placement of cameras in a network impact the network's success in accurately measuring objects and downstream computer vision tasks.
+These experts consider various optimisation algorithms and evaluate configurations according to objective functions and constraints in the attempts to minimise some error metric.
 
-The optimal camera placement problem is known as the camera network design problem (CND) in photogrammetry. CND in photogrammetry has been a problem that has been investigated for a couple of decades. Arising at a similar time in the fields of computational geometry and geodesy with works by \citet{chvatal1975combinatorial} and \citet{grafarend1974optimization} respectively. Victor Klee introduced the Art Gallery problem (AGP) to Chvatal, seeking to answer what the minimum number of guards required to monitor an art  gallery that is an n-walled polygon such that every point is covered. \citet{chvatal1975combinatorial} provided a theorem that gives the upper bound as n/3 guards required. This covered important topics for computational geometry such as vertex covering and Delaunay triangulation and translated to the optimal camera placement problem \cite{o1987art}.
+\subsection{The Camera Network Design Problem}
+The optimal camera placement problem is known as the camera network design problem (CND) in photogrammetry. CND in photogrammetry has been a problem that has been investigated for a couple of decades. Arising at a similar time in the fields of computational geometry and geodesy with works by \citet{chvatal1975combinatorial} and \citet{grafarend1974optimization} respectively. Victor Klee introduced the Art Gallery problem (AGP) to Chvatal, seeking to answer what the minimum number of guards required to monitor an art  gallery that is an n-walled polygon such that every point is covered. \citet{chvatal1975combinatorial} provided a theorem that gives the upper bound as n/3 guards required. This covered important topics for computational geometry such as vertex covering and triangulation and translated them to the optimal camera placement problem \cite{o1987art}.
 \cite{grafarend1974optimization}'s work in the field of geodesy sought to optimise geodetic networks by generalising F.R Helmert's optimisation concepts and defined a classification scheme.  Whilst originally it pertained to the field of geodesy, photogrammetry professionals such as \citet{fraser1984network}, \citet{shortis1989network} and \cite{mason1994expert} leveraged the classfication scheme in considering their camera network design, showing the interrelated nature of geodesy network design optimisation and CND optimisation. This classified scheme for the optimisation of geodetic networks was divided into four orders of design problems: 
-
 The zero order design (ZOD) problem, known as the datum problem is primarily to do with the choice of coordinate system for measurements. In CND optimisation this is the calibration step in which the world coordinate system is mapped out. 
-
 The first order design (FOD) problem, the configuration problem (also known as the sensor placement problem), is the most complex in nature and persists to this day as finding the optimal configuration of the network. In CND has to do with the layout of the cameras in the network. 
-
 The second order design (SOD) problem is the weighting problem problem. It asks, \textit{``What ought to be 
 measured after designing an optimal configuration''}. It seeks to optimally distribute the observational work load. This translates to CND in how precise should the cameras be and what properties should they have such as: sensor resolution, the focal length and field of view to name a few. 
-
 The third order design (TOD) problem also known as the bayesian approach or densification problem, asks \textit{what is the benefit of any additional measurement or observation in the network after reasoning about the quality of the present network?}. In CND, how does one improve the existing camera configuration by adding new cameras to the network.
-
 \citet{grafarend1974optimization} stated that it is impossible to optimise geodetic networks without reviewing optimisation algorithms and distinguishing between direct or simulation methods. This statement in part aligns with \citet{fraser1984network}'s statement that the precision of the network is a function of its geometry which is determined in the design stage. 
 \citet{fraser1984network} mentioned that computer simulation has been implemented successfully in the optimisation of photogrammetric network design (PND) and stated that there are a number of ways that computer simulation can be used for PND. Utilising the classification scheme by \citet{grafarend1974optimization}, \citet{fraser1984network} put forth a general method for using computer simulation in the process of photogrammetric network design optimisation.
-
 \citet{mason1995expert} authored a paper titled \textit{Expert system-based design of close-range photogrammetric networks} designed an expert system -- as defined by \citet{denning1986towards} -- based network design system called CONSENS (CONfiguration of SENsors Stations). This work defined generic network design as achieving precise and reliable measurement of a desired object by configuring an optical triangulation network according to the classification scheme defined by \citet{grafarend1974optimization}. \citet{mason1995expert} states that the following three characteristics of a multi-camera network can have a large influence on it's triangulation accuracy.
 The first is that observational redundancy -- that is the visibility of a keypoint in more than two views such that it can be triangulated -- leads to an improvement in measurement precision. 
 The second is flexible camera positioning as to be adapted to suit the accuracy of the system and third is the convergence of multi-ray intersections, that is to say that the better both the distribution and convergence of the rays interesecting at a keypoint the better the triangulation and precision of the measurement will be. 
-
 \citet{mason1995expert} highlighted the complexity of the FOD problem as there is a practically infinite number of locations in which the cameras can be placed. A trial and error approach to the FOD problem is insufficient as there is no certainty that all points of interest will be visible, some views may be redundant in that no new information is gained (e.g two cameras clustered closely together) and lastly that arbitrarily chosen cameras might not satisfy the accuracy requirements of the system.
-
+\citet{olague2002optimal} highlighted that trial and error is an insufficient approach for finding optimal camera placement.
 To further highlight the complexity of the FOD problem, \citet{tarbox1995planning} mapped their restricted form of the sensor placing problem, selecting a minimal number of cameras in a discretised search space to maximise the coverage of a region,  onto the set-covering problem. The set-covering problem was listed as NP-complete by \citet{karp1972reducibility}, that is the algorithmic complexity is larger than polynomial complexity. This stands in agreement with the work done by \citet{lee1986computational} who showed that finding the minimum number of cameras was proven to be NP-complete \cite{lee1986computational}.
 It is clear that the optimal camera placement problem is a complex problem.
 
+\subsection{What Is Optimised: Objective Functions and Constraints}
 
+%SO WHAT: This shows that coverage was based on a geometric approximation and lack true measurement accuracy.
+\citet{horster2006optimal} define the coverage of points in space as captured if they are captured at a required minimal resolution according to a sampling frequency.
+\citet{gonzalez2009optimal} consider a mixture of directional and omnidirectional cameras in their for optimising camera placement for total coverage. They define visibility for both directional and omnidirectional cameras based on a predefined occupancy map, a map where the workspace is divided into cells that can be classified as covered or uncovered by a camera.
+Whilst \citet{zhao2013approximate} defines coverage as a weighted average of covered points. Therefore if all points are visibile the coverage sums to one. They claim that it is nolonger the sole reliable metric that ought to be optimised for camera placement problems given the varying applications each imposing their own performance objectives.
+These are all examples of assuming an approximation of geometric keypoint visibility but does not actually give one insight into the accuracy with which these keypoints are detected and whether another placement would yield a better pose estimation algorithm confidence score for the keypoint.
+% Coverage, according to \citet{horster2006optimal}, \citet{gonzalez2009optimal} and \citet{zhao2013approximate}, keypoint being visible  a specific resolution of the image and given a certain weight to the region where the keypoint is likely to occur. 
+%% >>> LINK NEEDED: from "is the point seen?" (coverage) to "how accurately is it measured?" (Olague) - one sentence that sets up the shift from visibility to error
 
-% \citet{mason1995expert} considers heuristic methods and that design-by-simulation is a term used by photogrammetric experts to define systems that have employed the use of heuristic methods.
-% Whilst the classification scheme by \cite{grafarend1974optimization} is helpful it does not give answers to the questions, \textit{how many cameras?} and \textit{where should the cameras placed?} \cite{mason1995expert}, \citet{mason1995expert} goes on to develop the CONSENS framework and architecture. They make use of two techniques of interest to this research the viewing sphere and the use of CAD. The placement of cameras is a viewing direction problem and using a volume sphere that is constrained they were able to use the unit sphere to ensure that cameras were a fixed distance from the object needing to be measured and the space was discretised so that the sphere was subdivdied into cells. The use of polar coordinates assisted the placement of the camera as two parameters determine the location, pan and tilt of the camera. The CAD system was useful for visualising the camera layout and added to the realism of the solution.
-% The limitations were that the object being measured was polyhedral in nature and not a human and secondly that it was not suitable to open world systems that is beyond the confinement of a known environment such as the interior of a machine.
+%SO WHAT: This is an error approxiimation minimisation that does not truly represent the reconstruction process. 
+\citet{olague2002optimal} posed the problem of CND in terms of optimisation design, breaking it into two steps the first being the analysis of error propogation from which they get their criterion to be minimised. The uncertainty analysis yields a covariance matrix when applied to the reconstruction process. The criterion is the maximum diagonal element of the covariance matrix. The uncertainty of the detection of a keypoint is represented by the covariance matrix from the uncertainty analysis of the reconstruction process. Olague considered error in the 3D reconstruction process of estimating image points. The 3D error estimation image model assumed a gaussian distribution and could be calculated using a first-order taylor series relation. They make the underlying assumption that the intrinsic and extrinsic camera parameters are perfectly known. 
+Their use of a gaussian image-error model, models detection noise of a system but does not model how a pose estimation detector function based on it's view of a subject.
+This paper though only considers static objects and does not consider dynamic objects. Human movement is an example of dynamic movemeent. With dyanmic movement of humans comes dynamic occlusion, that is when the subject occludes other parts of their body e.g when bending over to pick something up the torso might cause occlusion of the hips.
+Thus it is important that occlusion be taken into consideration when capturing human movement.
+%% >>> LINK NEEDED: Olague assumes static targets; one sentence on what changes when the subject moves (dynamic occlusion) to open the occlusion paragraphs
 
-%Onwards
-The search for optimal CND solutions was studied further by experts such as \citet{olague2001applications}, \citet{gonzalez2009optimal}, \citet{zhao2013approximate}, \citet{rahimian2016optimal} and \citet{jorgensen2018simulation} to name a few. All the aforementioned experts agree that camera placement impacts the performance of a multi-camera network. The placement of cameras in a network impact the network's success in accurately measuring objects and downstream computer vision tasks.
-These experts consider various optimisation algorithms and evalute configurations according to objective functions and constraints in the attempts to minimise some error metric.
+\citet{chen2008occlusion} define a probabilistic occlusion based quality metric with a number of simplifying assumptions.  
+They model the occluder as a plane and take the worst case scenario, when an occluder is close to the point needing detecting. They assume that the probability of occlusion is independent of spatial location and that occluder orientations are uniformly distributed.
+\citet{chen2008occlusion} state that their probabilistic occlusion model aligned well with measured occlusions of subjects in an action volume. Their validation results between prediction and experimental results was exceptional at a rate of 0.97, near 1. They tested with 256 unique camera configurations by placing between 1 and 8 camera k a circular ring surrounding the action volume of approximately 16\,m$^2$ and the exercises performed in a 2x2 area at the centre of the action volume. They had cameras placed between 1m and 3m in height.
+We know these simplifications do not hold true due to the fact that human limbs are in motion and could occlude different aspects of the body dependent on the motion, the occluders are not uniformly distributed as the arms are in front of the human and rarely go behind the person.
+Their action trials had a single LED placement on five different body parts for the different trials. The subjects would walk, turn around and wave their arms for 20s at 30hz recording rate. These exercises especially turning around would allow for the LED to be visible by all cameras at least once when compared to in place action sequences such as squats, lunges or pushups there is no guarantee of visibility of the keypoint.
 
-\citet{olague2001applications} highlighted that trial and error is an insufficient approach for finding optimal camera placement. Olague posed problem of CND in terms of optimisation design, breaking it into two steps the first being the analysis of error propogation in the system to find a criterion by which the second step of global optimisation would seek to minimise the criterion. Olague considered error in the 3D reconstruction process, 3D estimation process and error in image estimation of points to arrive at an error propogation based criterion. Olague poiinted out that due to occlusion in the system this introduced discontinuities and that it is a combinatorial optimisation process. The choice of algorithm was a multi-cellular genetic algorithms and inspired the use of genetic algorithms in later work conducted by \citet{aissaoui2018designing}. Olague chose the genetic algorithm due to their proven effeciency in searching non-linear and complex search spaces as well as genetic algorithms providing a generic framework for solving the combinatorial problem. This paper though only considers static objects and does not consider dynamic objects.
+This metric does handles point detection as either seen or unseen.
 
-\citet{gonzalez2009optimal} attempts to solve the optimal camera placement problem for maximising coverage. Their objective was to find the optimal camera placement for a minimum number of cameras to cover a specific region, unlike \cite{olague2001applications} they considered constraints of both the camera and environment. This meant considering the camera's field of view and focal length and for the environment's size and shape. Gonzalez considers a mixture of both ominidirectional and directional cameras. They note that due to the poor resolution of omnidirectional cameras they are insufficient for object recognition. 
-Whilst this paper wanted to maximise total coverage later work done by \citet{zhao2013approximate} states that maximising the coverage is no longer sufficient due to the varying applications each imposing their own performance objectives.
+%% >>> LINK NEEDED: hand-over to Rahimian: Rahimian says Chen \& Davis ignore camera convergence angles, so near-parallel cameras can score well; Rahimian keeps the probabilistic occlusion model and adds triangulability and resolution
+Chen and Davis ignore the convergence angles of cameras meaning that near parallel cameras (which make for poor reconstruction) would score well. Rahimian makes use of the probabilistic occlusion based model but adds triangulability and resolution as key factors for evaluating camera placement.
 
-\citet{zhao2013approximate} mentioned that camera placement researchers have resorted to discretising both the physical environment and the camera network configuration search spaces due to the complexity of searching an otherwise continous and near infinite search space. The viewing sphere has been one method of discretising the camera network configuration search space, employed by \citet{mason1995expert}, \cite{olague2001applications} and \cite{rahimian2016optimal}. In particluar \cite{rahimian2016optimal} subsamples their footage that was shot at 120hz in only considering every 240th frame. The aforementioned researchers make use of a constrained viewing sphere setting the object to be measured at the centre of the sphere and placing cameras on the surface of a segmente sphere fixing the radius from the object to be measured and the location, pan and tilt of the cameras can be defined by two parameters alpha and beta in spherical coordinates since the radius is constant. 
+\citet{rahimian2016optimal} introduced and compared two methods to position a set of cameras to maximise the visibility of keypoints with minimal 3D reconstruction error in the presence of dynamic occulsion (e.g from the motion of the subject). The first method is an occlusion and triangulability method that seeks to estimate the best views for a target group of keypoints. The seocond seeks to distribute the cameras such that the target keypoints are visible  from the widest range of viewing angles.
+Rahimian pointed to sources of 3D motion capture failure namely: 3D reconstruction error, resolution degredation and dynamic occlusion. 
+THe first, 3D reconstruction error is due to poor triangulability and uncertainty arising from the camera calibration process and the confidence of the keypoints location in the image. The when the keypoint is identified in two triangulable (non-parallel) camera views the rays from the sensor to the image point do not intersect precisely and normaly the midpoint between the two rays is taken. Based on the work done by \citet{olague2002optimal} \citet{rahimian2016optimal} make use of a conservative 40-140 as the range of acceptable convergence angles that is to say triangulable.
+The second is due to the distance between the keypoint and the camera. The keypoint shrinks in size as the keypoint moves further away from the camera and this is true for any keypoint and camera. Therefore based on their personal setup they have a binary approach of a keypoint being visible or not dependent on the distance of the keypoint from the camera. 
+The third being dynamic occulusion, Rahimians approach is to use probabilisitc occlusion modeling that takes both the resolution degredation and the triangulability. Rahimian models occluders as large panes of infinite occlusion dividing the space in two. The metric returns a number between 0 and 360 summing the occluder orientations where a keypoint is not visible in at least two triangulable views. This probabilistic occulision sum is then used in an occlusion based metric that is fed into the Simulated Annealing algorithm.
+%Added my fact below
+%% FIX NEEDED (facts, Rahimian Tables 3 and 5): the measure is the percentage of FRAMES in which ALL markers were detected. 17 cameras, walking: ad hoc placement 30%, Chen & Davis-based placement 70%, occlusion-based placement 86%. 9 cameras: occlusion method 26% vs distribution method 31%. Say which camera count each number belongs to.
+Rahimian also recorded a two minute walk scene at 120Hz and took every 240th frame. For the live full-body capture all the markers were detected in 26\% of the frames for the occlusion method in comparison to 31\% for the distribution method. 
+Rahimian concluded that the occlusion based method outperformed the distribution of camera views however noted that for live detection the distribution method was able to better in matching markers to skeletal keypoints than the occlusion based method.
+In one particluar comparison where the widest distribution was known the distribution based method consistently found solutions close to the optimal solution but the occulsion based error metric tended to be planar in it's configuration. The authors speculate that it could be due to the nature of the occclusion based error metric, modeling occluders as infinte planes. It influences a cameras position on the same vertical plane either higher up or lower would receive the same occlusion-based error metric.
+%% FIX NEEDED: this sentence is not accurate. In live capture the occlusion-based placement did BETTER than ad hoc and Chen & Davis placements (17 cameras: 86% vs 30% and 70%); with 9 cameras it scored 26% vs 31% for the distribution method. "Less than 35% of keypoint detection" misreads the measure (frames with all markers detected, not share of keypoints). Decide what the numbers support, then reword.
+Rahimians geometric approximation of occlusion metric worked on it's own measure but failed when it came to live capturing that yielded less than 35\% of keypoint detection in all the frames.
+%% >>> LINK NEEDED: end of Rahimian: what this result says about whether a proxy metric predicts the real outcome (his metric won on its own measure, not in live capture)
+
+%% ADD PARAGRAPH (not written yet): Aissaoui 2018 - occlusion as a line-of-sight constraint (static, dynamic or the subject itself), resolution as min/max distance, binary error (tag seen by 2+ cameras), virtual humanoid doing walk/run/jump, simulation only. Read section 3.2 first.
+
+%% FIX NEEDED: this paragraph is unfinished. The second sentence repeats "guided genetic algorithm" and loses its grammar, and the last sentence stops at "They". Source to check: Aissaoui section 3.2 (binary error: a tag counts as reconstructed when 2+ cameras see it).
+\citet{aissaoui2018designing} use graphical modeling of a humanoid figure with markers on the body and animates the figure such that it has action sequences of running, walking and jumping. They used a guided genetic algorithm to ensure that  camera placement optimisation method a guided genetic algorithm (GGA) which relies on a distribution and estimation technique (DET) that reduces the search spaces and initialises the camera positions for the genetic algorithm (GA). They make use of a binary error metric defining cameras as being visible by a minimum number of cameras. They 
+%% FIX NEEDED: say "pose estimation" rather than "point detection"; "multi-pose" probably means multi-person or multi-view (check Ci); ActiveMoCap (one moving camera, predicted pose uncertainty) is missing from this exceptions paragraph; the MPJPE sentence about THIS work belongs after "This research seeks..." in the closing, not in the exceptions.
+Two papers made use of point detection algorithms, \citet{jorgensen2018simulation} puts a detector in the simulated loop for scoring but this for a tray of static objects and \citet{ci2023proactive} performs human pose estimation in a synthetic environment but for a multi-camera network in motion such as drones and in crowded scenes. This work utilises the MPJPE (mean per joint position error) metric as the primary means of evaluation measuring the difference between the ground truth and the 3D reconstructed infered keypoints. 
+Whilst \citet{ci2023proactive} is the closest paper to our research in terms of multi-pose, synthetic data pose estimation it's use of moving cameras is outside of the context of static cameras for motion capture analysis of sports and biomechanics. 
+This means that we gain no insight as to how a pose estimator might perform under differing camera configurations. 
+%% ADD PARAGRAPH (not written yet): the exceptions that DO put an estimator in the loop - Jorgensen (rigid tray), ActiveMoCap and Ci (moving cameras) - and why none answers fixed-camera exercise capture
+%% >>> LINK NEEDED: from the occlusion work to your closing "so what": none of it measures how a pose estimator's accuracy changes with view
+%% CLOSING SO WHAT (moved from the Chen & Davis paragraph) - reword "insufficient" so it applies to all geometric and occlusion criteria, not just Chen & Davis:
+From literature we have shown that geometric approximations and occlusion based metrics are insufficient as the sole metrics for ensuring the optimal placement of cameras . This research seeks to measure a pose estimator's performance to assess the suitability of a camera configuration in a synthetic environment.
+Since we are dealing with a combinatorial subset selection problem which requires an optimisation algorithm to explore the space with constraints to best guide the algorithm in exploring and evaluating solutions.
+%% >>> LINK NEEDED: short bridge from objectives to the constraints they share (visibility, resolution, group, triangulability)
 \cite{zhao2013approximate}, \cite{rahimian2016optimal} and \citet{aissaoui2018designing} list a number of useful constraints and consideration in the context of camera placement planning. The first is the visibility constraint. In the context of multi-camera configurations it requires that a target keypoint is visible by at least $$k > 1 $$ cameras in the network. This ensures that reconstruction is possible enabling the recovery of lost depth information. 
 The resolution degradation constraint termed partial coverage by \cite{zhao2013approximate} is the distance threshold beyond a camera's effective range. That is that a marker must be visible within a camera's resolution \cite{aissaoui2018designing}. Instead of a hard cutoff \citet{zhao2013approximate} implements a fuzzy model that can degrade from a keypoint being fully-visible to completely missing using a predefined threshold for the computer vision task. 
 The third constraint is the group constraint which ensures that the set number of cameras are adhered to, not assigning more than one camera to the same physical location in the network.
-The final constraint is the placement of stereo sensors or 3D point reconstruction by \citet{rahimian2016optimal}, this constraint minimses the number of cameras whilst guaranteeing that every keypoint is covered by a stereo pair. This ensures that a pair is triangulable, that is, a keypoint is visible by two cameras within a convergence angle range such that the angle suspended at the keypoint by the two cameras meet the baseline requirement. \citet{aissaoui2018designing} also enforce at cameras should be sufficiently non-parallel. \cite{rahimian2016optimal} put forth a conservative range of between 40-140 degrees based on the paper by \cite{olague2001applications} such that cameras are not parallel with one another sufficient for convergence. 
-\cite{rahimian2016optimal} also discuss a probabilisitc occlusion model that feeds into an occlusion based error metric. They modeled an occluder as an infinite plane that would divide the viewing space in two, camera's on on the front side would consider the keypoint as visible whilst cameras on the back side would consider the keypoint occluded. 
-Both \citet{zhao2013approximate} and \citet{rahimian2016optimal} considered the simulated annealing algorithm. Simulated annealing is an effective method for finding solutions close to the global optimal. Simulated annealing mimics the the cooling, annealing, of a heated metal. The annealing technique starts with some high temperature T, which represents the probability of accepting configurations with a higher error metric and as the temperature T cools the lower the probability of accepting a solution with a higher error metric until the objective function does not change overtime. The high temperature assists the algorithm of escaping local minima by selecting worse solutions initially with the hopes of cooling toward a global optimum.
-The triangulation constraint is problematic for the SA algorithm as SA only changes a single camera at a time. This means that swapping out a camera does not necessarily mean that the new camera will benefit the system as keypoint might still only be visible by a single camera. \citet{rahimian2016optimal} combat this by adding a penalty for uncovered keypoints so that the algorithm is rewarded for adjusting a camera such that it covers a previously unseen keypoint, despite it still not being triangulable it is at least visible and thus rewarded. 
-Whilst \cite{rahimian2016optimal} compared two methods an occlusion based method and a distribution based method, showed that for live capture scenarios that the distribution based method was better able to match markers to skeletal keypoints. In one particluar comparison where the widest distribution was known the distribution based method consistently found solutions close to the optimal solution but the occulsion based error metric tended to be planar in it's configuration. The authors speculate that it could be due to the nature of the occclusion based error metric, modeling occluders as infinte planes. It influences a cameras position on the same vertical plane either higher up or lower would receive the same occlusion-based error metric. 
-
-\citet{jorgensen2018simulation} highlights the value that simulation based techniques hold over real-world testing. Every time a new layout is needing to be tested the simulation environment is updated and there is no need for rearrangement, recalibration, or retrials of motion capture where pose estimation is needing to be reevalutated. Jorgensen rightly noted that photo-realism rendering is computationally expensive and that often a trade off needs to be made between realism and rendering time. Using simulation is feasible to do many more experiments as the only cost is computation time when compared to the real-world where retrials are prone to unsystematic trial and error. The research contributed in that high success rates in the simulation of their experiments matched to high success rates in the real-world. They mention that for synthetic images to be used in the context of computer vision that two criteria need to be met that is namely: the iamges need to be sufficiently realistic and secondly that the computer vision algorithms need to exhibit similar behaviour for both the real and synthetic images. 
+The final constraint is the placement of stereo sensors or 3D point reconstruction by \citet{rahimian2016optimal}, this constraint minimses the number of cameras whilst guaranteeing that every keypoint is covered by a stereo pair. This ensures that a pair is triangulable, that is, a keypoint is visible by two cameras within a convergence angle range such that the angle suspended at the keypoint by the two cameras meet the baseline requirement. \citet{aissaoui2018designing} also enforce at cameras should be sufficiently non-parallel. \cite{rahimian2016optimal} put forth a conservative range of between 40-140 degrees based on the paper by \cite{olague2002optimal} such that cameras are not parallel with one another sufficient for convergence. 
 
 
 
-Both \cite{olague2001applications} and \cite{mason1995expert} consider viewing spheres that are constrained. This sets cameras a fixed distance from the object and causes cameras to face toward the center of the sphere. This allows camera placement to be defined by two numbers in polar coordinates given the unit sphere defining the pan tilt and location of the camera. 
 
-An early paper by \cite{gonzalez2009optimal} sought to maximise the total coverage of a region by a multi-camera but later work by \cite{zhao2013approximate} stated that maximising coverage is no-longer sufficient in finding general optimal camera placement due to the varying performance objectives of varying camera networks comparing traffic detection and biomechanic pose detection requiring different setups.
-\cite{zhao2013approximate} highlighted the complexity of the CND problem and that most researchers have resorted to discrete approaches. Researchers would discretise both the camera network as well as the camera environment. \citet{zhao2013approximate} compared and evaluted the accuracy and scalability of numerous optimisation algorithms namely greedy, greedy heuristics, Markov-Chain Monte-Carlo (MCMC),Simualted Annealing, Linear and Semi-definite Programming relaxations. Zhao sought to solve two problems MIN and FIX. 
+\subsection{How the Space Is Searched: Discretisation and Optimisers}
+\citet{zhao2013approximate} mentioned that camera placement researchers have resorted to discretising both the physical environment and the camera network configuration search spaces due to the complexity of searching an otherwise continous and near infinite search space. The viewing sphere has been one method of discretising the camera network configuration search space, employed by \citet{mason1995expert}, \cite{olague2002optimal} and \cite{rahimian2016optimal}. The aforementioned researchers make use of a constrained viewing sphere setting the object to be measured at the centre of the sphere and placing cameras on the surface of a segmente sphere fixing the radius from the object to be measured and the location, pan and tilt of the cameras can be defined by two parameters alpha and beta in spherical coordinates since the radius is constant.
+
+\citet{zhao2013approximate} compared and evaluted the accuracy and scalability of numerous optimisation algorithms namely greedy, greedy heuristics, Markov-Chain Monte-Carlo (MCMC),Simualted Annealing, Linear and Semi-definite Programming relaxations. Zhao sought to solve two problems MIN and FIX.
 The MIN problem, defined as minimising the number of cameras such that a target coverage can be achieved subject to some constraints.
 The FIX problem, definied as maximising the coverage of a subject to a fixed number of cameras and other constraints. 
 Zhao's approach to both these problems is as mentioned above the discretisation of the camera configuration that is the location and rotation of cameras and their properties and secondly the discretisation of the target space, that is the objects position and orientations.
 Zhao found that the greedy method found a good approximation for the MIN problem and focused the rest of the paper to solving for the FIX problem. To solve the FIX problem they mentioned that they could iteratively apply a solver for FIX for different number of cameras and search for a minimum that satisfies the target coverage rate. 
 Zhao concluded that a hybrid of approaches to assist in the CND problem would be welcomed such as using the greedy algorithm to initialise camera placement over random camera placement initialisation. Zhao encouraged the further consideration of emergent optimisation techniques not covered in the paper. 
-%We utilise this idea in finding our fixed set size solution to the optimal camera placement problem.
+%% >>> LINK NEEDED: introduce the optimiser choices in the literature (Olague: GA; Zhao and Rahimian: SA below) before these sentences
+Olague poiinted out that due to occlusion in the system this introduced discontinuities and that it is a combinatorial optimisation process. The choice of algorithm was a multi-cellular genetic algorithms and inspired the use of genetic algorithms in later work conducted by \citet{aissaoui2018designing}. Olague chose the genetic algorithm due to their proven effeciency in searching non-linear and complex search spaces as well as genetic algorithms providing a generic framework for solving the combinatorial problem.
+Both \citet{zhao2013approximate} and \citet{rahimian2016optimal} considered the simulated annealing algorithm. Simulated annealing is an effective method for finding solutions close to the global optimal. Simulated annealing mimics the the cooling, annealing, of a heated metal. The annealing technique starts with some high temperature T, which represents the probability of accepting configurations with a higher error metric and as the temperature T cools the lower the probability of accepting a solution with a higher error metric until the objective function does not change overtime. The high temperature assists the algorithm of escaping local minima by selecting worse solutions initially with the hopes of cooling toward a global optimum.
+The triangulation constraint is problematic for the SA algorithm as SA only changes a single camera at a time. This means that swapping out a camera does not necessarily mean that the new camera will benefit the system as keypoint might still only be visible by a single camera. \citet{rahimian2016optimal} combat this by adding a penalty for uncovered keypoints so that the algorithm is rewarded for adjusting a camera such that it covers a previously unseen keypoint, despite it still not being triangulable it is at least visible and thus rewarded. 
 
-\citet{rahimian2016optimal} introduced and compared two methods to position a set of cameras to maximise the visibility of keypoints with minimal 3D reconstruction error in the presence of dynamic occulsion (e.g from the motion of the subject). The first method is an occlusion and triangulability method that seeks to estimate the best views for a target group of keypoints. The seocond seeks to distribute the cameras such that the target keypoints are visible  from the widest range of viewing angles.
-Rahimian pointed to sources of 3D motion capture failure namely: 3D reconstruction error, resolution degredation and dynamic occlusion. 
-THe first, 3D reconstruction error is due to poor triangulability and uncertainty arising from the camera calibration process and the confidence of the keypoints location in the image. The when the keypoint is identified in two triangulable (non-parallel) camera views the rays from the sensor to the image point do not intersect precisely and normaly the midpoint between the two rays is taken. Based on the work done by \citet{olague2001applications} \citet{rahimian2016optimal} make use of a conservative 40-140 as the range of acceptable convergence angles that is to say triangulable.
-% To combat the resolution degredation to try to get as close to the subject as possible without cutting off the subject. We define an aciton volume 
-THe second is due to the distance between the keypoint and the camera. The keypoint shrinks in size as the keypoint moves further away from the camera and this is true for any keypoint and camera. Therefore based on their personal setup they have a binary approach of a keypoint being visible or not dependent on the distance of the keypoint from the camera. 
-The third being dynamic occulusion, Rahimians approach is to use probabilisitc occlusion modeling that takes both the resolution degredation and the triangulability. Rahimian models occluders as large panes of infinite occlusion dividing the space in two. The metric returns a number between 0 and 360 summing the occluder orientations where a keypoint is not visible in at least two triangulable views. This probabilistic occulision sum is then used in an occlusion based metric that is fed into the Simulated Annealing algorithm. In Simulated Annealing the algorithm for a given configuration only updates one camera at a time, this has no guarantee that the newly selected camera would have a keypoint that was previously untracked. They insert a penalty for keypoints that are unseen by any cameras so that the algorithm will be rewarded for camera placements that are update to see a previously unseen keypoint even if it is not triangulable yet.
-Rahimian also recorded a two minute walk scene at 120Hz and took every 240th frame.
-% We recored at 60HZ and we take every second frame of a specific repetion of a motion so that we are already subsampling
-%We utilise this for our occlusion error objective function such that we reward the algorithm for improving the visibility of keypoints even if it is not triangulable.
-Rahimian concluded that the occlusion based method outperformed the distribution of camera views however noted that for live detection the distribution method was able to better in matching markers to skeletal keypoints than the occlusion based method.
+\subsection{Subject and Occlusion Modelling}
 
-
+\subsection{Simulation Fidelity and Validation}
 \citet{jorgensen2018simulation} highlights the value that simulation based techniques hold over real-world testing. Every time a new layout is needing to be tested the simulation environment is updated and there is no need for rearrangement, recalibration, or retrials of motion capture where pose estimation is needing to be reevalutated. Jorgensen rightly noted that photo-realism rendering is computationally expensive and that often a trade off needs to be made between realism and rendering time. Using simulation is feasible to do many more experiments as the only cost is computation time when compared to the real-world where retrials are prone to unsystematic trial and error. The research contributed in that high success rates in the simulation of their experiments matched to high success rates in the real-world. They mention that for synthetic images to be used in the context of computer vision that two criteria need to be met that is namely: the iamges need to be sufficiently realistic and secondly that the computer vision algorithms need to exhibit similar behaviour for both the real and synthetic images. 
 
-
-% % BREAK HERE 
-% \citet{mason1995expert} implements or designs and expert system-based design the early terminology used for AI and mentions the observational redundancy, camera positioning and ray intersections for point triangulation. Expert System. 21 years on from the paper by \citet{grafarend1974optimization} the classification system is still being used to assist in PND however highlighting that the most complex of the design problems is the first order design, camera placement. The complexity of the problem is in the practically infinite number of camera poses even when working with a restricted environment.
-
-% %insert this here about the complexities
-% \citet{karp1972reducibility} \citet{tarbox1995planning}  This has to do with finding the optimal camera configuration a problem that has been proven to be NP-complete known as the set covering problem. This has to do with finding the minimum number of subsets that covers a set. When translated to the domain of camera placement means finding the minimal subset of cameras that covers every surface of an object \cite{karp1972reducibility,tarbox1995planning}. 
-% \cite{tarbox1995planning} mentions that the FOD problem is NP-complete meaning that it's algorithmic complexity exponential (greater than polynomial). This means that trial and error approaches, ie. bruteforcing the solution space is infeasible and a heuristic approach is required.
-
-
-
-% \citet{mason1995expert} stated that for a high accuracy industrial photogrammetry measurements that an appropriate multi-camera network is required. 
-
-% Experts have relied upon simulation based approaches to overcome the complexity of the camera network design \cite{mason1995expert}
-% Aspects that influence the accuracy of camera configuration considered are triangulability, where a point of interest is viewed by more than one camera, the number and position of cameras in the network and lastly the convergence and intersection of cameras for a point of interest. These all contribute to the accuracy of a multi camera network.
-
-% It has been noted that for an optimal multi-camera setup there ought to be focus on accuracy specifications, essentially a measure of correctness, quality of the configuration defined by precision and realiability. precision is a function of the geometry of the camera network.
-
-% \cite{olague2001applications} is revolutionary as it poses the problem in terms of a global optimisation design exploring the solution space by means of both combinatorial search and non-continuous optimisation using a Genetic Algorithm and define the criteria 
-
-
-
-% %%% BREAK HERE 
-% In the field of photogrammetry experts leveraged the classifcation scheme by \citet{grafarend1974optimization} approach to optimising networks to multi-camera networks refered to as multi-station photogrametry \cite{fraser1984network,mason1995expert}
-% This has to do with finding the optimal camera configuration a problem that has been proven to be NP-complete known as the set covering problem. This has to do with finding the minimum number of subsets that covers a set. When translated to the domain of camera placement means finding the minimal subset of cameras that covers every surface of an object \cite{karp1972reducibility,tarbox1995planning}. 
-% Using this four order classification system 
-
-% Simulation based approaches to solving the Optimal Camera placement problem, known as photogrammetry network design, has been employed for decades \cite{fraser1984network} \cite{mason1995expert} and \cite{olague2001applications}. They were originally classified into four orders of design zero, first, second and third respectively classified as the datum, configuration, weight and densification problems as originally classified by \cite{grafarend1974optimization} and has been implemented by 
-% It has been noted that for an optimal multi-camera setup there ought to be focus on accuracy specifications, essentially a measure of correctness, quality of the configuration defined by precision and realiability. precision is a function of the geometry of the camera network.
-% By discussing and using the classification system, \citet{fraser1984network} describes a general process by which a camera network can be optimised through computer simulation.
-% Althopu
-% \citet{mason1995expert} stated that for a high accuracy industrial photogrammetry measurements that an appropriate multi-camera network is required. 
-
-% Experts have relied upon simulation based approaches to overcome the complexity of the camera network design \cite{mason1995expert}
-% Aspects that influence the accuracy of camera configuration considered are triangulability, where a point of interest is viewed by more than one camera, the number and position of cameras in the network and lastly the convergence and intersection of cameras for a point of interest. These all contribute to the accuracy of a multi camera network.
-
-% \cite{tarbox1995planning} proved that the FOD problem is NP-complete meaning that it's algorithmic complexity exponential (greater than polynomial). This means that trial and error approaches, ie. bruteforcing the solution space is infeasible and a heuristic approach is required.
-% \citet{mason1995expert} employs the general formulation by \cite{fraser1984network} 
-% Following the choice of camera (observation selection scheme), lens, sensor the photogrammetry pracitioner/designer constructs an approximation of a suitable geometry where the bundle method is used. The simulation strategies tackle the orders of design as by \cite{grafarend1974optimization} but does not answer questions of number of cameras.
-
-% \cite{olague2001applications} is revolutionary as it poses the problem in terms of a global optimisation design exploring the solution space by means of both combinatorial search and non-continuous optimisation using a Genetic Algorithm and define the criteria 
-
-% \citet{zhao2013approximate, rahimian2016optimal, jorgensen2018simulation}
-\section{Motion Capture for biomechanics}
-
-\section{Human Pose Estimation}
-\subsection{Top Down Bottom Uo}
-\subsection{Multi-view 3D reconstruction}
-\subsection{Evaluation Metrics}
-
-\section{Camera placement and camera network design}
+\subsection{Empirical Evidence from Markerless Configuration Studies}
 \cite{kwak2025assessing}
-
-\cite{rahimian2016optimal}
-\cite{zhao2013approximate}
-\cite{jorgensen2018simulation}
 \cite{yang2025comparison}
 \cite{nishikawa2025comparison}
 \cite{kim2026comparison}
 \cite{wren2023comparison}
 
-\subsection{Human Pose Estimation Algorithms}
+\subsection{Learned Pose Estimation in the Loop: Nearest Neighbours}
 
-
+\subsection{Summary and Research Gap}
 \section{Synthetic Data for Human Pose Estimation}
 
-\subsection{Synthetic Dataset}
+\subsection{Synthetic Human Datasets}
 
 \cite{varol2017learning}
 \cite{patel2021agora}
@@ -161,9 +180,21 @@ Rahimian concluded that the occlusion based method outperformed the distribution
 \cite{black2023bedlam}
 \cite{tesch2025bedlam2}
 
-\subsubsection{Modeling the human body historical}
+\subsection{Human Body Models: Early Approaches}
 
-\subsubsection{Modern advancements}
+3D Human Body Model representations started as early as the 1970s with work by \citet{marr1978representation} representing the human body as a hierarchical tree structure each component corresponding to a body part represented as a cylinder. The work by \cite{marr1978representation} was used by \citet{hogg1983model} when developing the WALKER model that represents a human as a series of hierarchical components by means of classical image processing techniques such as edge detection a walking human in a scene could be located and represented by the WALKER model as series of cylindrical components. \citet{rohr1994towards} continued the model-based recognition humans that \cite{marr1978representation} and \citet{hogg1983model}  using cylinders but contributed further by using medical motion studies to develop a motion model however both were constrained models restricted to walking parallel to the image plane.
+\citet{gavrila19963} made use of tapered super-quadratics, generalisations of ellipsoids, to create the ELLEN and DARIU human body models that are unconstrained in fitting to various complex human motion. 
+
+The problem with these human body model representations is that the human is not a hierarchy of cylinders or superquadratics. 
+A breakthrough in representing the complexity of human motion started with faces in the 1999 SIGGRAPH paper by \citet{blanz2023morphable} titled \textit{A morphable model for the synthesis of 3D faces} which utilised 200 head scans providing structure (facial features) and texture (colour) data in cylindrical coordinates of human faces. They developed a morphable 3D face model representing the face as a linear combination of the shape and texture vectors. The shape vector contained x,y,z coordinates for each of the vertices of the shape. The texture vector contained r,g,b values for each of the corresponding vertices. This morphable model allowed for new unseen facial pictures to be represented in by the 3D morphable model.
+
+
+
+Human body models are an important component of human pose estimation. 
+Earl approaches to human body modeling was using cylinders to appropriate the limbs.
+
+\subsection{Human Body Models: SMPL and SMPL-X}
+The skinned meshed linear blended person model
 \cite{loper2015smpl}
 \cite{SMPL-X:2019}
 \cite{bregier2026human}
@@ -172,26 +203,29 @@ Rahimian concluded that the occlusion based method outperformed the distribution
 \cite{mahmood2019amass}
 \cite{ghorbani2021soma}
 
-\subsection{digital content creation tools}
+\subsection{Digital Content Creation Tools}
 Maybe a table showing the languages, add-ons, rendering, api's
-
 \subsubsection{Unreal}
 \subsubsection{Unity}
 \subsubsection{Blender}
 
-\subsection{Sim2Real}
+\subsection{Sim-to-Real Transfer}
 
-
-\section{Optimisation for combinatorial subset selection problem}
-
+\section{Optimisation for Combinatorial Subset Selection}
 All optimisation methods
- \cite{jorgensen2018simulation} \cite{olague2001applications} \cite{zhao2013approximate}, \cite{rahimian2016optimal}
+ \cite{jorgensen2018simulation} \cite{olague2002optimal} \cite{zhao2013approximate}, \cite{rahimian2016optimal}
 
+\subsection{Combinatorial Subset Selection}
+
+\subsection{Continuous Metaheuristics}
  \cite{eberhart1995particle}
  \cite{storn1997differential}
 
+\subsection{Discrete and Set-Based Variants}
 \cite{van2023set}
 \cite{langeveld2015set}
+
+\subsection{Fixed-Cardinality Fuzzy and Evolutionary Variants}
 \cite{khan2012fuzzy}
 \cite{mohiuddin2016fuzzy}
 
