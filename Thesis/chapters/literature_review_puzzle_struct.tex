@@ -1,0 +1,637 @@
+% !TEX root = ../thesis.tex
+% literature_review_puzzle_struct.tex -- the puzzle file with the spine (2.3.2) STRUCTURED, duplicates resolved, stale comments removed.
+% NOT included in thesis.tex. Every line of prose is YOURS (copied, not retyped). Anything I removed from the flow is commented out with % [CUT] / % [DUP] / % [OLD], never deleted.
+% Built from literature_review_puzzle.tex on 7 Oct 2026. That file is untouched.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE PICTURE ON THE BOX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% THE CLAIM OF THE CHAPTER:
+%   Placement work optimises geometric/visibility PROXIES; they were checked in simulation or against marker/LED visibility or a classical estimator,
+%   never a learned pose estimator on a person; real markerless studies show accuracy depends on the camera view; so this thesis scores
+%   configurations with MPJPE (+ triangulability and visibility terms) from learned detectors in a simulated room.
+%
+% THE CHAIN (2.3.2 delivers it):  (1) what they optimise -> (2) what they were checked against -> (3) markerless evidence -> (4) so: detector in the loop
+%
+% STATUS (7 Oct, end of day)
+%   2.3.2 THE SPINE
+%     slot 1 opening ................ DONE (polish only)
+%     slot 2 coverage ............... DONE (polish only)
+%     slot 3 Olague & Mohr .......... STRUCTURED: 2 merges + 1 phrase fix + 1 WRITE sentence             (~30-40 min)
+%     slot 4a Chen & Davis .......... STRUCTURED: FACT 2 + 1 optional WRITE clause + 1 fix              (~40 min)
+%     slot 4b Rahimian .............. STRUCTURED: 2 fixes + 1 WRITE sentence (proxy vs reality)         (~60 min)
+%     slot 4c Aissaoui .............. STRUCTURED: 2 fixes + 1 WRITE sentence (so what)                  (~45 min)
+%     pivot ......................... STRUCTURED: add Aissaoui + 1 vague phrase                         (~15 min)
+%     slot 5 Jorgensen .............. STRUCTURED: 3 CHECKs + 1 WRITE sentence (so what)                (~45 min)
+%     slot 6 closing ................ STRUCTURED: FACT 3 (last one) + decide length                     (~30-45 min)
+%     vocabulary block .............. 2 fixes + 1 duplicate to resolve                                  (~20 min)
+%   2.3.8 table + gaps .............. EMPTY (raw material ready)                                          (~1.5-2 h)
+%   everything else ................. see the map below
+%
+% CHAPTER MAP (section -> job -> feeds -> state)
+%   2.1  Motion capture for biomechanics ...... why markerless; placement is the open question ..... Aim 1 ..... WRITTEN, needs closing 'therefore'
+%   2.2  Human pose estimation ................ detectors -> triangulation -> metric ............... O6, O7 .... PARTIAL
+%   2.3.1 CND problem (background) ............ define; scope to FOD; why heuristics .............. scope ..... WRITTEN, long
+%   2.3.2 What is optimised ................... THE SPINE ........................................ G1 ........ see STATUS above
+%   2.3.3 How the space is searched ........... discretisation, optimisers, single swap ........... G3, O5 .... WRITTEN, needs linking
+%   2.3.4 Subject and occlusion ............... what each paper treats as the subject ............ G2 ........ PIECES ONLY
+%   2.3.5 Simulation fidelity ................. does simulation transfer? ........................ G4 ........ 1 PARAGRAPH
+%   2.3.6 Markerless configuration studies .... view-dependent accuracy (evidence for link 3) ..... G1 ........ EMPTY (facts ready)
+%   2.3.7 Learned estimator in the loop ....... ActiveMoCap, Ci ................................... G1 ........ PIECES ONLY (moved here)
+%   2.3.8 Summary and gap ..................... table + G1-G4 ..................................... all ....... EMPTY
+%   2.4  Synthetic data (background/decisions)  dataset, body model, motion, tool, sim2real ......... O1-O3 ..... SKELETON
+%   2.5  Optimisation (background/decisions) .. K-of-N, PSO/DE, SBPSO, FEPSO ....................... O5 ........ SKELETON
+%   2.6  Chapter summary ...................... section -> decision ............................... ........... EMPTY
+%
+% LEGEND
+%   %% [DONE]            finished; only polish left
+%   %% >>> LINK NEEDED:  a joining sentence is missing (the note says what job it does)
+%   %% >>> WRITE:        a sentence only you can write; the facts, quotes and pages are given -- your words
+%   %% >>> MERGE:        two of your sentences say the same thing; keep one or combine them
+%   %% [FIX]             a factual correction, with quote and page
+%   %% [CHECK]           a claim I could not verify; find the page or cut it
+%   %% SUGGESTION:       one or two options (structure only, never wording)
+%   %% !!! FACT n OF 3   a must-fix fact still open (FACT 1 is now handled inside slot 3; FACT 2 and FACT 3 remain once each)
+%   % [CUT] / [DUP] / [OLD]   YOUR text, taken out of the flow and commented out. Delete these lines once you are happy.
+%   %% [MOVED HERE]      your text relocated from another section
+%
+% HOW REPETITION WAS HANDLED: when two of your sentences said the same thing, the clearer / correct one stays in the flow and the other becomes % [DUP]
+%   with a note saying which line it duplicates and whether it carried a unique fact worth keeping (if so, that fact is listed in a WRITE or MERGE note).
+
+
+\mychapter{Literature}{Literature}{}
+\label{chap:literature}
+
+%% [PIECE | from: literature_clean.tex, chapter opening (3 paragraphs)]
+%% >>> LINK NEEDED:
+%%     The three opening paragraphs overlap (each says "this chapter ..."). Decide ONE roadmap paragraph.
+%%     Write the roadmap LAST, after 2.3-2.5 exist, so it only promises what the chapter delivers.
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: keep the first paragraph (your gap statement) as the hook, and turn the other two into a section-by-section roadmap (section -> job -> objective, see the chapter map above).
+%%     B: open with the problem (placement is unguided), then the roadmap; move the "simplified geometric criteria" claim down to 2.3.8 where the evidence lives.
+This literature review gives a brief chronological history of camera placement optimisation before thematically evaluating and critiquing existing literature. Due to the computational complexity of the problem, existing work discretises the search space. Literature limits the number of cameras to a finite set and their possible positions. Most existing work evaluates simplified geometric criteria instead of what a real human pose estimation system would measure. These simplifications leave a gap in how best to place cameras for markerless pose estimation, which this thesis addresses.
+
+This chapter gives a broad sweeping overview of the literature that is relevant to solving the main objectives of this research
+Simulation based network design optimisation. We look at existing synthetic human datasets as a means to assist us in setting up the synthetic environment for our simulation based approach. We look to human body modelling and human mesh recovery methods that have been implemented to best represent humans in a virtual environment. Turning back to simulation based approaches we look at optimisation algorithms that are suited to our use case in simulation based camera optimisation for multi-view markerless pose estimation 
+This chapter gives an overview and critique of the literature starting with simulation based approaches a brief chronological survey is done of the development of optimising camera network design starting with the classification scheme by \citet{grafarend1974optimization} and ending at \citet{mason1995expert}'s work in using it for photogrammetric network design (PND). A critique on existing simulation based papers is given whilst highlighting the constraints used for the objective functions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.1  MOTION CAPTURE FOR BIOMECHANICS   [WRITTEN; needs a closing "therefore" and 3 citations moved in]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motion Capture for Biomechanics}
+
+The principles of exercise biomechanics are rooted in human movement mechanics. It's a critical area of study for understanding how physical activity and exercise impacts the human body and health \cite{forte2023biomechanics}.
+Motion capture plays an important role in the study of biomechanics \cite{mundermann2006evolution}
+Optical motion capture is a popular method to capture and analyse movement and human biomechanics. 
+Whilst Vicon systems remain the gold-standard \cite{colyer2018review} for marker-based motion capture. In the work by \citet{chromy2025validated} they used a six-axis robotic manipulator to move a rigid marker array and reported a tracking error of 0.65mm of the Vicon system. As shown in Chapter\ref{chap:introduction} marker-based systems have drawbacks that markerless pose estimation offers solutions to. Markerless motion capture uses standard video data and relies on deep learning human pose estimation algorithms to detect joint locations. Markerless motion capture can be divided into monocular (single camera) pose estimation  or multi-camera pose estimation. Multi-camera markerless motion capture which relies on combining multiple monocular camera views by means of reconstruction allows for 3D joint centres to be estimated and calculated allowing for 3D biomechanical analysis to be done \cite{wade2022applications}. 
+Various works have shown that markerless motion capture is nearing performance of marker-based systems for biomechanical motion capture. 
+In work done by \citet{unger2025differentiable} they showed that markerless pose estimation systems had high-levels of agreement with an optical marker-based motion capture system using Qualisys and Optitrack, showing values of RMSE of joint angles between 1-3 deg and 3mm in trunk displacement specifically in the context of arm tracking in stroke rehabilitation patients.
+\citet{outerleys2025clinical} used the TheiaMarkerless system for assessing if gait deviations associated with knee osteoarthritis could be reliably and consistently detected using markerless motion capture. Their agreement was less than RMS 3 degree which showed similar performance with the joint angle RMSE of \citet{unger2025differentiable}. The limitation of \citet{outerleys2025clinical} is the use of TheiaMarkerless a commercial system without knowledge if the results would hold true for other markerless systems for biomechanics.
+In a meta-analysis by \citet{scataglini2024accuracy} they concluded that markerless based motion capture systems could be comparable to marker-based systems in terms of accuracy, reliability and concurrent validity for gait analysis. Their caveat was that for the assessment of ankle movements and transversal plane movements markerless systems were not accurate enough for clinical settings.
+Despite \citet{outerleys2025clinical} and \citet{unger2025differentiable} these have both been in clinical settings one for rehabilitation and the other for locomotor, gait analysis. These differ from our desired context of improving the agreement of markerless pose estimation systems for exercise biomechanics.
+The point to the fact that in studies the camera placement varied and that the camera placement could influence accuracy, reliability and concurrent validity outcomes. If camera placement affects the agreement between marker-based and markerless systems then optimising camera placement could assist in closing the gap between the two motion capture systems.
+
+Given that markerless motion capture systems are nearing the performance of marker-based systems yet requiring further study and validation the study of optimal camera placement in the context of biomechanics and exercise movement is a valid area that could lead to further agreement between marker-based and markerless systems.
+
+%% >>> LINK NEEDED:
+%%     End of 2.1: a one-sentence "therefore" that hands over to 2.2 (markerless removes lab/marker limits, but placement is unguided -> next: how pose estimation works and where cameras matter).
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: close 2.1 on your last paragraph ("Given that markerless ... nearing the performance ...") and add the hand-over as a final sentence.
+%%     B: move the marker-vs-markerless agreement studies (wren2023comparison, nishikawa2025comparison, yang2025comparison) in here as extra evidence for "nearing marker-based performance" -- they are currently dumped as bare citations under 2.3.6.
+%% COACH: your sentence starting "The point to the fact that in studies the camera placement varied" is unfinished; it is the bridge to your whole thesis, so it is worth finishing properly.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.2  HUMAN POSE ESTIMATION   [PARTIAL: your lines re-sorted under the four subsections they belong to]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Human Pose Estimation}
+Human Pose Estimation, here on out referred to as pose estimation, is a well studied area in computer vision that aims to detect anatomical human body parts such as the joints from images and video data known as frame data \cite{zheng2023deep}.
+Human pose estimation allows for further study of the human body from the motion data and keypoint data it provides and has found applications across a broad range industries such film and television, gaming and healthcare.
+Human Pose Estimation is a complex task with many challenges such a dynamic human motion makes for a challenging task with issues such as limbs obscuring other parts of the body, known as self-occlusion, and motion blur due to rapid motion. Deep learning techniques have rapidly developed and have outperformed traditional computer vision methods due to their ability to better extract features from the image data making them suitable for the complexity of human pose estimation\cite{dang2019deep}.
+
+%% >>> LINK NEEDED:
+%%     One sentence saying what 2.2 is for: only what the objective function needs (detector -> triangulation -> metric). Currently the section starts without a purpose.
+
+\subsection{Pose Estimation Models}
+%% COACH TODO: the three detectors you run (HRNet, ViTPose, YOLO26x): one short paragraph each on WHAT it is. Bib keys for these are missing (see refs_added_by_claude.bib; unverified).
+%% [PIECE | from: literature_clean.tex, moved from the middle of 2.2: single-person vs multi-person, regression vs heatmap, and "we utilise ..."]
+Modern Pose Estimation methods can be categorised into two classes, single person and multi-person detectors. Due to the complexity of the multi-person detector problem they tend to be more computationally intensive than single person detectors which tend to be suitable for light weight and real-time applications examples of.
+For single person pose estimation methods are either regression based methods or heatmap-based methods \cite{dubey2023comprehensive}.
+We utilise the YoloPose, VitPose and HRNet algorithms on our dataset. 
+%% >>> LINK NEEDED:
+%%     Say WHY these three (they span families: heatmap CNN, transformer, one-stage regression).
+%%     Say what "confidence" means for each (YOLO26 and ViTPose do not report the same quantity) -- your goodness term multiplies by it.
+
+\subsection{Top-Down and Bottom-Up Approaches}
+%% [PIECE | from: literature_clean.tex, moved from the middle of 2.2]
+For multi-person pose estimation methods are either top down or bottom up.
+Top down human pose estimation is where the humans are identified first with bounding boxes and then in each bounding box the joints or keypoints are then located and detected with a confidence score.
+The Bottom up human pose estimation algorithms are where any and all keypoints, joint locations are identified in the scene and then they are attributed to humans.
+
+%% >>> LINK NEEDED:
+%%     Why this matters for CAMERAS: top-down pipelines can fail at the person-detection step from some viewpoints; detection quality depends on appearance. This is the sentence 2.3.6 relies on.
+
+\subsection{Multi-View 3D Reconstruction}
+
+What happens here is there are u, v pixel coordinates in an image plane and the u,v coordinate corresponds to an xyz location in the world coordinate system. There is no way to get a u, v to a xyz in true geometric solve due to the loss of information. 
+This loss of information therefore requires another image with the same point identified and located in its $u_1$, $v_1$ space and these cameras need to be calibrated. that means that the intrinsics and extrinsic parameters of the cameras are known. 
+Using these matrices a rotation and a translation matrices we can convert between the four coordinate systems camera coordinate system, image coordinate space, world coordinate system and pixel coordinates 
+
+%% >>> LINK NEEDED:
+%%     Name the method (DLT triangulation) and add WHY convergence angle matters -- the 40-140 deg prior in 2.3 rests on it.
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: add a short equation block for the projection model (you describe it in words now).
+%%     B: keep it in words but add one sentence on weighted triangulation (confidence c_ij), since your objective uses it.
+
+\subsection{Evaluation Metrics}
+
+Various evaluation metrics exist in human pose estimation these are MPJPE, PA-MPJPE and PCK amongst others. 
+The MPJPE is the mean per joint position error which is an L2 Norm of the distance between the ground truth and the infered keypoint per joint, per frame. This averages out and gives a score
+
+%% >>> LINK NEEDED:
+%%     Add SDPE (the spread of per-frame MPJPE) and one sentence on the detector-convention offset (detectors define joints differently from the SMPL-X armature) -- it sets up your limitation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3  SIMULATION-BASED CAMERA NETWORK DESIGN   [THE CORE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simulation-Based Camera Network Design}
+\label{sec:relatedwork}
+The search for optimal CND solutions was studied further by experts such as \citet{olague2002optimal}, \citet{gonzalez2009optimal}, \citet{zhao2013approximate}, \citet{rahimian2016optimal} and \citet{jorgensen2018simulation} to name a few. All the aforementioned experts agree that camera placement impacts the performance of a multi-camera network. The placement of cameras in a network impact the network's success in accurately measuring objects and downstream computer vision tasks.
+These experts consider various optimisation algorithms and evaluate configurations according to objective functions and constraints in the attempts to minimise some error metric.
+
+%% COACH: "All the aforementioned experts agree" -- they AGREE that placement matters but DISAGREE on what to optimise. That disagreement is the thread of 2.3.2.
+%% >>> LINK NEEDED:
+%%     Turn the two paragraphs above into a roadmap: reviewed along these axes (what is optimised 2.3.2, how searched 2.3.3, subject 2.3.4, validation 2.3.5, real markerless evidence 2.3.6-2.3.7), gap in 2.3.8.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.1  THE CAMERA NETWORK DESIGN PROBLEM   [WRITTEN; long (about 2 pages of what should be 1)]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A (compress): keep (1) definition + FOD, (2) ONE lineage paragraph Grafarend -> Fraser -> Mason, (3) the scope sentence, (4) NP-hardness as the reason for heuristics. The four order-paragraphs (ZOD/FOD/SOD/TOD) can become one.
+%%     B (keep but signpost): keep the four orders, but add a sentence after them saying which one this thesis addresses and why the others are fixed or out of scope.
+%% >>> LINK NEEDED:
+%%     SCOPE SENTENCE MISSING: which order does this thesis address (FOD), and what happens to ZOD, SOD, TOD? Evidence in Mason 1995: "TOD is irrelevant to the vast majority of close-range photogrammetric applications" and FOD is "arguably the most complex".
+\subsection{The Camera Network Design Problem}
+The optimal camera placement problem is known as the camera network design problem (CND) in photogrammetry. CND in photogrammetry has been a problem that has been investigated for a couple of decades. Arising at a similar time in the fields of computational geometry and geodesy with works by \citet{chvatal1975combinatorial} and \citet{grafarend1974optimization} respectively. Victor Klee introduced the Art Gallery problem (AGP) to Chvátal, seeking to answer what the minimum number of guards required to monitor an art  gallery that is an n-walled polygon such that every point is covered. \citet{chvatal1975combinatorial} provided a theorem that gives the upper bound as n/3 guards required. This covered important topics for computational geometry such as vertex covering and triangulation and translated them to the optimal camera placement problem \cite{o1987art}.
+\cite{grafarend1974optimization}'s work in the field of geodesy sought to optimise geodetic networks by generalising F.R Helmert's optimisation concepts and defined a classification scheme.  Whilst originally it pertained to the field of geodesy, photogrammetry professionals such as \citet{fraser1984network}, \citet{shortis1989network} and \cite{mason1994expert} leveraged the classification scheme in considering their camera network design, showing the interrelated nature of geodesy network design optimisation and CND optimisation. This classified scheme for the optimisation of geodetic networks was divided into four orders of design problems: 
+The zero order design (ZOD) problem, known as the datum problem is primarily to do with the choice of coordinate system for measurements. In CND optimisation this is the calibration step in which the world coordinate system is mapped out. 
+The first order design (FOD) problem, the configuration problem (also known as the sensor placement problem), is the most complex in nature and persists to this day as finding the optimal configuration of the network. In CND has to do with the layout of the cameras in the network. 
+The second order design (SOD) problem is the weighting problem. It asks, \textit{``What ought to be 
+measured after designing an optimal configuration''}. It seeks to optimally distribute the observational work load. This translates to CND in how precise should the cameras be and what properties should they have such as: sensor resolution, the focal length and field of view to name a few. 
+The third order design (TOD) problem also known as the Bayesian approach or densification problem, asks \textit{what is the benefit of any additional measurement or observation in the network after reasoning about the quality of the present network?}. In CND, how does one improve the existing camera configuration by adding new cameras to the network.
+\citet{grafarend1974optimization} stated that it is impossible to optimise geodetic networks without reviewing optimisation algorithms and distinguishing between direct or simulation methods. This statement in part aligns with \citet{fraser1984network}'s statement that the precision of the network is a function of its geometry which is determined in the design stage. 
+\citet{fraser1984network} mentioned that computer simulation has been implemented successfully in the optimisation of photogrammetric network design (PND) and stated that there are a number of ways that computer simulation can be used for PND. Utilising the classification scheme by \citet{grafarend1974optimization}, \citet{fraser1984network} put forth a general method for using computer simulation in the process of photogrammetric network design optimisation.
+\citet{mason1995expert} authored a paper titled \textit{Expert system-based design of close-range photogrammetric networks} designed an expert system -- as defined by \citet{denning1986towards} -- based network design system called CONSENS (CONfiguration of SENsors Stations). This work defined generic network design as achieving precise and reliable measurement of a desired object by configuring an optical triangulation network according to the classification scheme defined by \citet{grafarend1974optimization}. \citet{mason1995expert} states that the following three characteristics of a multi-camera network can have a large influence on its triangulation accuracy.
+The first is that observational redundancy -- that is the visibility of a keypoint in more than two views such that it can be triangulated -- leads to an improvement in measurement precision. 
+The second is flexible camera positioning as to be adapted to suit the accuracy of the system and third is the convergence of multi-ray intersections, that is to say that the better both the distribution and convergence of the rays intersecting at a keypoint the better the triangulation and precision of the measurement will be. 
+\citet{mason1995expert} highlighted the complexity of the FOD problem as there is a practically infinite number of locations in which the cameras can be placed. A trial and error approach to the FOD problem is insufficient as there is no certainty that all points of interest will be visible, some views may be redundant in that no new information is gained (e.g two cameras clustered closely together) and lastly that arbitrarily chosen cameras might not satisfy the accuracy requirements of the system.
+\citet{olague2002optimal} highlighted that trial and error is an insufficient approach for finding optimal camera placement.
+%% COACH FIX (facts): Lee & Lin 1986 show the art gallery problem is NP-HARD (abstract); NP-complete applies to the decision version they prove for vertex guards.
+%% COACH FIX (claim): 'algorithmic complexity larger than polynomial' is not proven (it needs P != NP). Say what the result means in practice instead.
+%% COACH CHECK: Tarbox PDF is a scan, so I could not verify the set-covering mapping. Re-read it yourself before relying on it.
+To further highlight the complexity of the FOD problem, \citet{tarbox1995planning} mapped their restricted form of the sensor placing problem, selecting a minimal number of cameras in a discretised search space to maximise the coverage of a region,  onto the set-covering problem. The set-covering problem was listed as NP-complete by \citet{karp1972reducibility}, that is the algorithmic complexity is larger than polynomial complexity. This stands in agreement with the work done by \citet{lee1986computational} who showed that finding the minimum number of cameras was proven to be NP-complete \cite{lee1986computational}.
+It is clear that the optimal camera placement problem is a complex problem.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.2  WHAT IS OPTIMISED   [THE SPINE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{What Is Optimised: Objective Functions and Constraints}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 1 -- OPENING: the claim of the subsection   [DONE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% [DONE] Slot 1 states the whole chain. Polish on Thursday evening only (e.g. "performance ... are affected" -> "is"; "Current literature ... optimise" agreement).
+The following paragraphs follow the order: coverage, geometric approximation error, occlusion and task success.
+
+Current literature on finding optimal camera placement optimise for geometric approximations namely: error-propagation metrics \cite{olague2002optimal}, occlusion based metrics \cite{chen2008occlusion, rahimian2016optimal, aissaoui2018designing}, marker visibility \cite{chen2008occlusion, aissaoui2018designing, rahimian2016optimal}, triangulability \cite{rahimian2016optimal, olague2002optimal} and coverage \cite{horster2006optimal, gonzalez2009optimal, zhao2013approximate}. One exception to this is the work by \citet{jorgensen2018simulation} who evaluates quality of the real estimator's success. These objectives that they model are geometric approximations that do not reflect how a pose estimation algorithm might perform based on a given camera view.
+% heir use of a Gaussian image-error model, models detection noise of a system but does not model how a pose estimation algorithm might function based on the view of a subject.
+Each work in the literature evaluated their approximation using either simulation environment \cite{olague2002optimal, aissaoui2018designing, zhao2013approximate, gonzalez2009optimal, horster2006optimal} or real measurements were used \cite{chen2008occlusion, rahimian2016optimal, jorgensen2018simulation, bodor2007optimal}. None of the static camera network papers evaluated their found solution using a human pose estimation algorithm on a human unlike the works done by \citet{kiciroglu2020activemocap} and \citet{ci2023proactive} who used human pose estimation in the loop for dynamic camera configurations.
+Literature has shown that the performance of markerless based systems are affected by camera view in contrast to previous assumptions \cite{zhao2026influence, baldinger2025influence, samani2026optimizing}. \citet{samani2026optimizing} state that no existing tool can predict whether a pose estimation model will detect keypoints reliably from a given camera view.
+Therefore we have decided to evaluate the camera configurations by using a pose estimation algorithm in the loop. We optimise the MPJPE along with triangulability and visibility metrics.
+
+%% [DUP] Your OLD opening and the old "shared assumptions" block, superseded by the new opening above. Each assumption now lives in its own paper paragraph:
+%%     detection error/resolution/distance -> Rahimian (2nd failure source); perfect camera knowledge -> Olague; uniform/independent -> Chen & Davis; infinite planes + "camera higher or lower" -> Rahimian.
+% [DUP] The objective functions in the literature all make assumptions about the measurement task. They all model error metrics such as occlusion, measurement accuracy and resolution requirements, however none of these actually measure true occlusion, image uncertainty or measurement accuracy or visibility. They all make geometric approximations for these metrics without actually testing these objective function metrics in a real-measurement setting using a pose-estimation algorithm.
+% [DUP] Authors set out to optimise geometric approximations of the factors that influence camera placement, factors such as occlusion (visibility), triangulation or reconstruction error and resolution requirements.
+% [DUP] They make assumptions about detection error uncertainty being purely based on resolution and distance from the camera and it's position or viewing angle. They assume perfect knowledge of camera parameters such as internal and external parameters that actually influence reconstruction error of keypoints.
+% [DUP] They assume that subjects remain at a fixed distance from camera and that markers are uniformly distributed by making measurement detection uniform across all cameras in a configuration irrespective of it's placement.
+% [DUP] For occlusion they assume that occluders form infinite planes of obfuscation when in reality a camera higher or lower might be able to overcome the occluder through changing it's view.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% VOCABULARY BLOCK -- constraints the papers share (visibility, resolution, group, triangulability)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SUGGESTION: A (current): keep here, before the papers, as definitions.  B: move after slot 6 and shrink to a one-paragraph summary.
+%% >>> LINK NEEDED: one bridging sentence from the opening to these shared constraints ("the objectives above share four constraints ...").
+\cite{zhao2013approximate}, \cite{rahimian2016optimal} and \citet{aissaoui2018designing} list a number of useful constraints and consideration in the context of camera placement planning. The first is the visibility constraint. In the context of multi-camera configurations it requires that a target keypoint is visible by at least $$k > 1 $$ cameras in the network. This ensures that reconstruction is possible enabling the recovery of lost depth information.
+%% [FIX] LaTeX: "$$k > 1 $$" is display maths in the middle of a sentence -- use $k > 1$.
+%% [FIX] attribution: Zhao ADOPTS the fuzzy model, he did not introduce it. p.5: "A fuzzy model has been introduced in [25] for this purpose, and it can be easily incorporated into our BIP model".
+The resolution degradation constraint termed partial coverage by \cite{zhao2013approximate} is the distance threshold beyond a camera's effective range. That is that a marker must be visible within a camera's resolution \cite{aissaoui2018designing}. Instead of a hard cutoff \citet{zhao2013approximate} implements a fuzzy model that can degrade from a keypoint being fully-visible to completely missing using a predefined threshold for the computer vision task.
+The third constraint is the group constraint which ensures that the set number of cameras are adhered to, not assigning more than one camera to the same physical location in the network.
+%% [FIX] Aissaoui does NOT enforce non-parallel cameras: he lists it (p.13, point 5: "Cameras should be arranged sufficiently non-parallel so that triangulation calculations are well conditioned")
+%%     but his objective has no convergence term (Eq.18, p.19). Remove "\citet{aissaoui2018designing} also enforce ..." or say he lists it but does not enforce it.
+%% >>> MERGE: the 40-140 deg sentence at the end of this paragraph repeats your Rahimian paragraph (slot 4b, "Based on the work done by \citet{olague2002optimal} ...").
+%%     Keep the general definition of triangulability HERE and the "40-140, based on Olague" detail in ONE place only (suggest: Rahimian).
+The final constraint is the placement of stereo sensors or 3D point reconstruction by \citet{rahimian2016optimal}, this constraint minimises the number of cameras whilst guaranteeing that every keypoint is covered by a stereo pair. This ensures that a pair is triangulable, that is, a keypoint is visible by two cameras within a convergence angle range such that the angle suspended at the keypoint by the two cameras meet the baseline requirement. \citet{aissaoui2018designing} also enforce at cameras should be sufficiently non-parallel. \cite{rahimian2016optimal} put forth a conservative range of between 40-140 degrees based on the paper by \cite{olague2002optimal} such that cameras are not parallel with one another sufficient for convergence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 2 -- COVERAGE (Horster, Gonzalez, Zhao)   [DONE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% [DONE] Seen-vs-measured point made; hand-over to Olague made. Polish only. (Coverage papers have points in space, not "keypoints" -- optional wording tweak.)
+%SO WHAT: This shows that coverage was based on a geometric approximation and lack true measurement accuracy.
+\citet{horster2006optimal} define the coverage of points in space as captured if they are captured at a required minimal resolution according to a sampling frequency.
+\citet{gonzalez2009optimal} consider a mixture of directional and omnidirectional cameras in their paper titled \textit{Optimal Camera Placement for Total Coverage}. They define visibility for both directional and omnidirectional cameras based on a predefined occupancy map, a map where the workspace is divided into cells that can be classified as covered or uncovered by a camera.
+Whilst \citet{zhao2013approximate} defines coverage as a weighted average of covered points using the simplification that all weights are set to one, treating all points as equally important. Therefore if all points are visible the coverage metric will be equal to one. In non-simplified cases the coverage metric will be weighted by the importance of a given point.
+\citet{zhao2013approximate} claims that coverage is no longer suitable as the sole metric to be optimised for camera placement problems as varying applications each have their own performance objectives.
+Coverage as a metric tells you if a keypoint is visible but it does not tell you how accurately the keypoint has been detected. For example two views with an equal coverage metric might have different confidence scores for the detected keypoint.
+%% [DUP] repeats the first half of the sentence above ("tells you if a keypoint is visible"); restore it only if you want a recap before the hand-over.
+% [DUP] Coverage only indicates if a keypoint is seen or not.
+\citet{olague2002optimal} asks the question how well is the keypoint seen.
+%% [OLD] your own earlier commented drafts of this point; superseded. Delete when happy.
+% These are all examples of assuming an approximation of geometric keypoint visibility but does not actually give one insight into the accuracy with which these keypoints are detected and whether another placement would yield a better pose estimation algorithm confidence score for the keypoint.
+% Coverage, according to \citet{horster2006optimal}, \citet{gonzalez2009optimal} and \citet{zhao2013approximate}, keypoint being visible  a specific resolution of the image and given a certain weight to the region where the keypoint is likely to occur.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 3 -- GEOMETRIC ERROR (Olague & Mohr)   [STRUCTURED: 2 merges, 1 fix, 1 WRITE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% [NOTE] your SO WHAT below says the model "does not truly represent the reconstruction process". It does represent it (error propagation through the triangulation);
+%%     what it does not represent is a learned detector -- which your sentence "Their use of a Gaussian image-error model ..." says correctly.
+%SO WHAT: This is an error approxiimation minimisation that does not truly represent the reconstruction process.
+\citet{olague2002optimal} posed the problem of CND in terms of optimisation design, breaking it into two steps the first being the analysis of error propagation from which they get their criterion to be minimised.
+%% >>> MERGE: the next two sentences say the same thing (the uncertainty analysis gives a covariance matrix that represents detection uncertainty). Keep one, or combine.
+The uncertainty analysis yields a covariance matrix when applied to the reconstruction process.
+The uncertainty of the detection of a keypoint is represented by the covariance matrix from the uncertainty analysis of the reconstruction process.
+%% [DONE] correct: Eq.18, p.933 "we propose to use as a measure psi_1(P), the maximum element in the diagonal of R_P".
+The criterion is the maximum diagonal element of the covariance matrix.
+%% [DONE] correct: Proposition 1, p.930 ("a linear approximation is to be used in which we assume a Gaussian distribution").
+The 3D error estimation image model assumed a Gaussian distribution and could be calculated using a first-order Taylor series relation.
+%% [CUT?] unclear and overlaps the Gaussian/Taylor sentence above. Restore only if you can say what it adds.
+% [CUT?] Olague considered error in the 3D reconstruction process of estimating image points.
+%% >>> MERGE: same fact twice: keep the first, and fold in the "random errors only" point from the second (p.930: "the variances in the object point coordinates arise solely from the propagation of random errors in the image coordinates measurements").
+They make the underlying assumption that the intrinsic and extrinsic camera parameters are perfectly known.
+This paper assumes perfectly known intrinsic and extrinsic parameters assuming that 3D reconstruction variance is aassumed to stem entirely from random errors in the extraction of 2D iamge coordinates.
+%% [DONE] correct: p.929, the lens system "is distortionless or ... the distortion has been cancelled out after having been estimated".
+They assume a pinhole camera setup where lens distortion is entirely negligible
+%% [FIX] the fixed radius is camera-to-TARGET, not "from the camera". p.928: "the cameras remain at a fixed distance to the set of target points to be measured";
+%%     inward-looking: p.935 "the cameras move on a sphere looking in-wards towards a central point". (2.3.3 explains the viewing sphere in full -- keep this one clause short to avoid repeating it.)
+The viewing sphere constraint assumes that all cameras are orientated inward towards the centre of the viewing sphere and that the cameras are positioned at a constant radial, r, distance from the camera.
+\citet{olague2002optimal}'s gaussian error model is based on the distortion of retro-reflective circular targets that, when nearing a near an 80$^{\circ}$ angle of incidence causes the image error to an infinite uncertainty. When dealing with human pose estimation the keypoints are joint locations often involving dynamic movement and not static circular targets on a flat surface that would be influenced by the angle of incidence.
+%% >>> WRITE: ONE sentence on the incidence-angle dependence (this replaces the wrong "constant from all views" idea). Facts:
+%%     image error is fitted against incidence angle (Fig.3 caption, p.932: "The X-axis corresponds to the incidence angle constraint (in degrees) and the Y-axis to the image error");
+%%     it grows without bound near the limit (p.932: "approaching this value leads to an infinite uncertainty");
+%%     cause = circular targets seen obliquely (p.932: "As the targets are circular and viewed as an ellipse"), measured with "a subpixel target detector, on the calibration grid" (p.932).
+
+
+
+%%     Your next sentence ("Their use of a Gaussian image-error model ...") then becomes the so-what: a geometric marker model, not a learned detector on a body.
+Their use of a Gaussian image-error model, models detection noise of a system but does not model how a pose estimation detector function based on its view of a subject.
+This paper only considers static objects and does not consider dynamic objects. Human movement is an example of dynamic movement. With dynamic movement of humans comes dynamic occlusion, that is when the subject occludes other parts of their body e.g when bending over to pick something up the torso might cause occlusion of the hips.
+Thus it is important that occlusion be taken into consideration when capturing human movement.
+%% [DONE] these last two lines already hand over to slot 4 (static targets -> moving humans -> dynamic occlusion).
+
+%% [CUT / DUP] from your table-cell paragraph; each is either repeated above or wrong:
+%% [DUP] repeats the first sentence of the Olague paragraph.
+% [DUP] They optimise the error-propagation criterion that arises from the uncertainty analysis of the reconstruction process
+%% [CUT] describes the CALIBRATION measurement (p.932), not the model.
+% [CUT] This paper assumes that the image errors are guassian and constant across the experiment.
+%% [CUT] WRONG: the model does depend on incidence angle (p.932, Eq.13). Replaced by the WRITE note above.
+% [CUT] This means that geometry of the viewing angle does not change or influence the error-propagation criterion.
+%% [CUT] the 100 measurements ESTIMATE the input image noise (p.932); they do not validate the criterion.
+% [CUT] They validated their data using emperical noise characterisation using 100 observations.
+%% [CUT] not found in the paper; restore only if you can give the page.
+% [CUT] They benchmarked against known network
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 4 -- OCCLUSION & THE HUMAN SUBJECT (Chen & Davis -> Rahimian -> Aissaoui) + THE PIVOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ---- 4a Chen & Davis   [STRUCTURED: FACT 2, 1 optional WRITE clause, 1 fix] ----
+%% [ORDER] metric -> assumptions -> your critique of the assumptions -> validation -> your critique of the validation -> so what -> hand-over.
+\citet{chen2008occlusion} define a probabilistic occlusion based quality metric with a number of simplifying assumptions.
+%% >>> WRITE (optional, one clause): what the metric IS. p.219: "we define our metric as the probability that at least two cameras observe a feature". (The only useful part of your table cell, now cut below.)
+They model the occluder as a plane and take the worst case scenario, when an occluder is close to the point needing detecting. They assume that the probability of occlusion is independent of spatial location and that occluder orientations are uniformly distributed.
+%% [NOTE] your critique is an inference, not a finding -- hedge "We know" (e.g. that the assumption is unlikely to hold for exercise). Chen & Davis list these assumptions themselves on p.220.
+We know these simplifications do not hold true due to the fact that human limbs are in motion and could occlude different aspects of the body dependent on the motion, the occluders are not uniformly distributed as the arms are in front of the human and rarely go behind the person.
+% !!!!!!!!!!!!!!!! FACT 2 OF 3 (still open: "exceptional at a rate of 0.97, near 1") !!!!!!!!!!!!!!!!
+%%  p.221: "the correlation between different sessions in the experimental data itself is 0.98 ... Thus a correlation of 0.98 is the upper bound of how well the experimental data can be predicted."
+%%     Say 0.97 against a ceiling of 0.98 -- it is a stronger point than "exceptional".
+\citet{chen2008occlusion} state that their probabilistic occlusion model aligned well with measured occlusions of subjects in an action volume. Their validation results between prediction and experimental had a correlation of 0.97 compared to the ceiling of 0.98, near 1. They tested with 256 unique camera configurations by placing between 1 and 8 camera k a circular ring surrounding the action volume of approximately 16\,m$^2$ and the exercises performed in a 2x2 area at the centre of the action volume. They had cameras placed between 1m and 3m in height.
+Their action trials had a single LED placement on five different body parts for the different trials.
+%% [FIX] one person, not "subjects": p.220 "We asked the person to move around in the working volume for approximately 20s in each trial, and sampled the cameras at 30Hz."
+The subjects would walk, turn around and wave their arms for 20s at 30hz recording rate.
+%% [NOTE] your point below is your inference -- label it so. Support from the paper: p.221 "markers were not explicitly covered, such as by placing a hand over a marker."
+These exercises especially turning around would allow for the LED to be visible by all cameras at least once when compared to in place action sequences such as squats, lunges or push-ups there is no guarantee of visibility of the keypoint.
+This metric handles point detection as either seen or unseen.
+Chen and Davis ignore the convergence angles of cameras meaning that near parallel cameras (which make for poor reconstruction) would score well. Rahimian makes use of the probabilistic occlusion based model but adds triangulability and resolution as key factors for evaluating camera placement.
+%% [DONE] hand-over to Rahimian (Rahimian p.1210 says exactly this: Chen & Davis "did not take into account the convergence angles of the cameras").
+
+%% [DUP] your pasted paragraph and table cells on Chen & Davis -- every fact is already in the paragraph above:
+%% [DUP] 256 configurations / ring / motions / 5 trials are all in the paragraph above.
+% [DUP] Chen and davis tested 256 unique camera configurations consistening of 1-8 cameras in a circular ring around the action volume where the following motions were performed: waving arms, walking in circles and turning around. These were repeated in 5 trials each of which had an LED on a different part of the body.
+%% [CUT] Chen & Davis do not run an optimiser; they propose and validate a metric (p.217: "By combining it with an optimization process we can automate camera placement"). The "at least two cameras" point is in the WRITE note above.
+% [CUT] This paper optoimises an objective quality metric using the maximisation of target feature visibility based on being viewed by 2 at least cameras
+%% [DUP] same assumption list as "They model the occluder as a plane ...".
+% [DUP] 1. This paper assumes the following: that occluders orientations are uniformly distributed, that each view of occlusion is independent across spatial locations and that occluders are modelled conservatively (in the worst case scenario where an occluder is close to a marker causing maximum obsfucation of the marker) and that tringulation is strictly a failure if not visible by at least two cameras
+%% [DUP] same validation facts as the paragraph above; also contains the 0.96 error (the paper says 0.98).
+% [DUP] This paper validates it's optimised results through emperical validation. They setup a testbed of a 4x4 space with a central action region of a 2x2 space using 256 distinct camera configurations of 1-8 cameras with varying heights from 1 to 3m. They physically collected data performing 3 actions walking, waving hands and turning. They attached a bright LED onto various body parts in across 5 repeated motion capture trials. The model achieved a pearson correation coefficient of 0.97 with emperical reality compared to the 0.96 experimental repeated trials.
+
+% ---- 4b Rahimian   [STRUCTURED: 2 fixes, 1 WRITE sentence] ----
+%% [ORDER] two methods -> three failure sources -> how the occlusion metric works -> how it was tested -> what the results showed -> planar result -> proxy vs reality -> hand-over.
+\citet{rahimian2016optimal} introduced and compared two methods to position a set of cameras to maximise the visibility of keypoints with minimal 3D reconstruction error in the presence of dynamic occlusion (e.g from the motion of the subject). The first method is an occlusion and triangulability method that seeks to estimate the best views for a target group of keypoints. The second seeks to distribute the cameras such that the target keypoints are visible  from the widest range of viewing angles.
+Rahimian pointed to sources of 3D motion capture failure namely: 3D reconstruction error, resolution degradation and dynamic occlusion.
+%% >>> MERGE: the 40-140 deg "based on Olague" sentence below also appears in the vocabulary block. Keep it HERE (p.1211: "Based on the results of Olague and Mohr, we established a relatively conservative range ... at 40 and 140 degrees").
+The first, 3D reconstruction error is due to poor triangulability and uncertainty arising from the camera calibration process and the confidence of the keypoints location in the image. Then when the keypoint is identified in two triangulable (non-parallel) camera views the rays from the sensor to the image point do not intersect precisely and normaly the midpoint between the two rays is taken. Based on the work done by \citet{olague2002optimal} \citet{rahimian2016optimal} make use of a conservative 40-140 as the range of acceptable convergence angles that is to say triangulable.
+The second is due to the distance between the keypoint and the camera. The keypoint shrinks in size as the keypoint moves further away from the camera and this is true for any keypoint and camera. Therefore based on their personal setup they have a binary approach of a keypoint being visible or not dependent on the distance of the keypoint from the camera.
+The third being dynamic occlusion, Rahimian's approach is to use probabilistic occlusion modelling that takes both the resolution degradation and the triangulability. Rahimian models occluders as large panes of infinite occlusion dividing the space in two. The metric returns a number between 0 and 360 summing the occluder orientations where a keypoint is not visible in at least two triangulable views. This probabilistic occlusion sum is then used in an occlusion based metric that is fed into the Simulated Annealing algorithm.
+%% [FIX] (1) the 3-to-17 camera sweep used normally distributed target points, not a grid (p.1215 "we ran the SA algorithm for camera sets of size 3 to 17 ... sample set of normally distributed target points");
+%%     (2) ONE participant with 37 markers, not "subjects" (p.1216 "A participant wore a body suit with 37 retro-reflective markers").
+This paper use a combination of synthetic and live motion capture experiments. The synthetic simulation evaluated sweeping camera sets of size 3-to-17 and used a normal distribution of target points tracking metrics such as convergence and average invisibilty. Real world empirical validation recorded one subject walking wearing a mocap suit with 37 reflective markers and comapred the live tracking accuracy using \citet{chen2008occlusion}'s placement metric, their own proposed occlusion-based optimisation  metric and an adhoc camera placement.
+%% [FIX] say which camera count: 26% vs 31% is the 9-camera comparison of the two objectives (Table 5, p.1219). Also add the 17-camera live result (Table 3, p.1217):
+%%     ad hoc 30%, Chen & Davis 70%, occlusion-based 86% of frames with all markers detected.
+Rahimian also recorded a two minute walk scene at 120Hz and took every 240th frame. For the live full-body capture all the markers were detected in 26\% of the frames for the occlusion method in comparison to 31\% for the distribution method.
+%% [FIX small] add "on its own (invisibility) measure": p.1218 "In all cases, the occlusion-based method outperformed the distribution-based method on the invisibility error".
+Rahimian concluded that the occlusion based method outperformed the distribution of camera views however noted that for live detection the distribution method was able to better in matching markers to skeletal keypoints than the occlusion based method.
+%% [CHECKED] pyramid test, 4 cameras (p.1219): "The distribution-based method consistently generates a solution that is approximately pyramidal" and "In the first two solutions, the four cameras lie approximately on a plane."
+%%     The vertical-plane explanation is the authors' (p.1216: "The occlusion-based metric treats camera positions on the back side of the occlusion plane at different angles of elevation as equivalent";
+%%     p.1217: "may miss camera arrangements the can see over or under real occluders"). Linking it to the planar RESULT is your inference -- "speculate" is fair if hedged.
+In one particular comparison where the widest distribution was known the distribution based method consistently found solutions close to the optimal solution but the occlusion based error metric tended to be planar in its configuration. The authors speculate that it could be due to the nature of the occlusion based error metric, modelling occluders as infinite planes. It influences a cameras position on the same vertical plane either higher up or lower would receive the same occlusion-based error metric.
+%% >>> WRITE: the proxy-vs-reality sentence (replaces the cut "less than 35%" sentence below). Facts: the occlusion metric beat the alternatives on its own measure and, with 17 cameras, live (86% vs 70% vs 30%);
+%%     with 9 cameras its placement did WORSE live than the distribution placement (26% vs 31%), and the authors call this "somewhat surprising given the superior performance of the occlusion-based method on the avatar point set" (p.1219).
+%%     So: a proxy can beat an ad hoc layout yet fail to rank two sensible layouts. That is your evidence for link 2 of the chain.
+%% >>> LINK NEEDED: Rahimian -> Aissaoui: Rahimian still scores idealised markers; Aissaoui adds an animated humanoid, but still scores only visibility.
+
+%% [CUT / DUP] Rahimian sentences that are wrong or repeated:
+%% [CUT] misreads the measure (frames with ALL markers detected, not a share of keypoints) and the numbers. Replaced by the WRITE note above.
+% [CUT] Rahimian's geometric approximation of occlusion metric worked on its own measure but failed when it came to live capturing that yielded less than 35\% of keypoint detection in all the frames.
+%% [DUP] covered by the validation and results sentences above.
+% [DUP] Rahimian tested a walking exercise in a 9 and 17 camera layout within their setup capturing full-body markers.
+%% [DUP] repeats "The third being dynamic occlusion ...". The penalty is on target POINTS seen by NO camera (p.1214; Eq.4 p.1218) -- that belongs in 2.3.3 where your single-swap paragraph already has it.
+% [DUP] This paper minimises occlusion based metric which penalises a target if it fails to see a arget point in at least two cameras with acceptable, 40-140, convergnece angles. and incorporating extra penalty for cameas that are seen by fewer than two cameras
+%% [DUP] repeats the three failure-source sentences. "forcing cameras to be more dispersed" was not found in the paper.
+% [DUP] This assumes that the triangulation window is strictly between 40 \& 140 and any point outside of that convergence angle range is considered unacceptable and untriangulable. This paper assumes a binary threshold of resolution degredation assuming that camera views beyond a certain distance has a physical cut-off and is absolutely invisible. This work assumes that occluders are large infinite planes, which affects the layout of cameras assuming that a vertical shift in camera position would do no better or worse in overcoming the occluder forcing cameras to be more dispersed.
+
+% ---- 4c Aissaoui   [STRUCTURED: 2 fixes, 1 WRITE sentence] ----
+%% [ORDER] subject (animated humanoid) -> objective -> assumptions -> how tested -> so what.
+%% >>> MERGE: add "54 markers" (Table 1, p.21; also your cut sentence below) into this opener.
+\citet{aissaoui2018designing} use graphical modelling of a humanoid figure with markers on the body and animates the figure such that it has action sequences of running, walking and jumping.
+%% [FIX] (1) the objective is a weighted sum of field-of-view, resolution and occlusion terms: Eq.18, p.19 "f = w1(r) + w2(Res) + w3(Occ)". "penalizing marker drop loss" was not found -- cut or give the page.
+%%     (2) "minimize convergence time by adapting the metaheuristic hyperparameters" is the OPTIMISER, not the objective -- move it to 2.3.3 or cut.
+Their objective function seeks to: maximize marker visibility by penalizing marker drop loss, field of view, resolution and geometric occlusions; minimize the number of cameras to reduce system setup cost whilst still achieving a 100\% marker reconstruction rate; minimize convergence time by adapting the metaheuristic hyperparameters.
+%% [DONE] all three assumptions verified: 50-350 cm (Table 1), interest point = mean marker position (Eq.7), binary: Er = 1 if "no or only one camera captures the tag", Er = 0 if "two or more" (p.18).
+The paper makes several assumptions. They assume that a marker is resolvable if its distance to the camera falls within a fixed depth interval (50 cm -- 350 cm). The initial camera placement points towards a single interest point, the mean 3D position of all marker locations for the entire sequence. The system assumes a binary triangulation metric: a marker must be visible by at least two cameras, otherwise reconstruction is assumed to be a failure.
+The method is entirely validated using synthetic experiments in MATLAB.
+Compared GGA to GA on quality, time and cost.
+%% >>> WRITE: the so-what (one or two sentences). Facts:
+%%     (a) the paper CALLS Er "reconstruction error" (p.18) but it is a visibility count -- no accuracy term;
+%%     (b) it LISTS non-parallel cameras as a requirement (p.13) but its objective has no convergence term (p.19), so two cameras 5 deg apart score the same as two at 90 deg;
+%%     (c) validation compares the guided GA with a plain GA in MATLAB (p.20): 4, 4, 6 vs 8, 10, 10 cameras (p.21) -- it tests the SOLVER, never the metric against reality.
+%% >>> LINK NEEDED: Aissaoui -> pivot: all of the above were scored by marker visibility.
+
+%% [CUT / DUP] Aissaoui sentences replaced by the cleaner versions above:
+%% [CUT] grammar broken; the GGA/DET detail belongs in 2.3.3 (GA lineage Olague -> Aissaoui) if you want it.
+% [CUT] They used a guided genetic algorithm to ensure that  camera placement optimisation method a guided genetic algorithm (GGA) which relies on a distribution and estimation technique (DET) that reduces the search spaces and initialises the camera positions for the genetic algorithm (GA).
+%% [CUT] states it backwards (tags are seen BY cameras); the binary metric is stated correctly in "The paper makes several assumptions ...".
+% [CUT] They make use of a binary error metric defining cameras as being visible by a minimum number of cameras.
+%% [CUT] unfinished fragment.
+% [CUT] They
+%% [DUP] optimiser detail; see 2.3.3.
+% [DUP] The camera network placement is optimized by means of a Guided Genetic Algorithm.
+%% [DUP] merged into the opener (keep "54 markers").
+% [DUP] They used a 54-marker humanoid for 3 actions: walking, running and jumping.
+
+% ---- THE PIVOT (your own finding)   [STRUCTURED: 2 small edits] ----
+%% [NOTE] slot 1 states this claim BEFORE the evidence; the pivot restates it AFTER the evidence. That is fine (claim -> evidence -> conclusion) as long as the pivot names the papers.
+%%     Add Aissaoui to it (his validation was solver vs solver with ideal markers).
+Both Chen and Davis and Rahimian checked their performance against measured visibility of keypoints or markers and did not measure the performance of pose estimation algorithms with metrics such as MPJPE that is where our research differs.
+%% [DUP] third version of "we use MPJPE in the loop" (also slot 1 last line and slot 6). Kept once in slot 6. Also "function and purpose driven development" is vague.
+% [DUP] We setup in a simulated environment and test the performance of pose estimation algorithms across different subjects measuring the MPJPE error to score the performance of camera placement, function and purpose driven development rather than optimised visibility of markers as the only metric
+%% >>> LINK NEEDED: pivot -> slot 5: introduce the ONE paper that does score the real task (Jorgensen) and say why it still does not answer your question.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 5 -- TASK SUCCESS (Jorgensen)   [STRUCTURED: 3 CHECKs, 1 WRITE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% [DONE] success definition verified: p.528 "A success is defined as a pose estimate, where the positional error is less than 3mm and the rotational error is less than 5".
+Optimise their pose estimation success rate, that is when the absolute positional error is less than 3 mm and the rotational error is $<$ 5°.
+%% [CUT?] unverified: vergence is one of the optimised parameters (p.525), so the cameras do not always point at the centre. Restore only with a page.
+% [CUT?] Assumes that cameras always point directly at the centre of the capture area (the tray).
+%% [CUT?] unverified; restore only with a page.
+% [CUT?] Assumes an upright orientation of the tray.
+%% [FIX] the paper treats rendering as a trade-off it then TESTS in the real world, not an assumption: p.524 "we focus on simpler and more computationally feasible rendering approaches ... Since the images are imperfect, we evaluate the solutions in the real world as well".
+Assumes that photorealistic rendering is not needed and simpler rasterization is sufficient.
+%% [CHECK] "Robotic arm" -- not found by me; check Fig.1 / Section 5 before keeping.
+Robotic arm used to mimic synthetic camera configs.
+%% [DONE] p.531 "The average pose of the objects was then used as the ground truth pose" (25 viewpoints, ICP).
+Used rigorous ground truth registration by registering views with multi-view ICP (iterative closest point) averaging.
+%% [CHECK] 96% is the 4-parameter optimisation IN SIMULATION (p.531; brute force on 2 parameters reached 88%). I could not find 97%. Check Fig.8 (pp.531-532) before keeping.
+Showed 96\% success rate, closely following the 97\% of the simulation environment.
+%% [RESHAPE] keep the Jorgensen half of this sentence here; the Ci half belongs in 2.3.7 (your other Ci sentences have been moved there).
+%%     "puts a detector in the loop" -> it is a classical estimator: ECSAD features, "k nearest neighbor search" (p.529), RANSAC and ICP -- not a learned detector.
+Two papers made use of point detection algorithms, \citet{jorgensen2018simulation} puts a detector in the simulated loop for scoring but this for a tray of static objects and \citet{ci2023proactive} performs human pose estimation in a synthetic environment but for a multi-camera network in motion such as drones and in crowded scenes.
+%% >>> WRITE: the so-what: Jorgensen is the only work that scores the REAL task, and shows simulation-optimal placements matched real ones (p.525: "camera placements with high success rates in simulation matched camera placements with high success rates in the real world"),
+%%     but with one stereo sensor, a rigid tray and a classical estimator -- no articulation, self-occlusion or learned detector. (His simulation-value paragraph stays in 2.3.5; do not repeat it here.)
+%% [DUP] about THIS work, not Jorgensen; repeats slot 1 last line. Kept once in slot 6.
+% [DUP] This work utilises the MPJPE (mean per joint position error) metric as the primary means of evaluation measuring the difference between the ground truth and the 3D reconstructed infered keypoints.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SLOT 6 -- CLOSING   [STRUCTURED: FACT 3 + decide length]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% SUGGESTION: slot 1 now states the chain up front, so slot 6 can be SHORT.
+%%     A: a 3-4 sentence closing that restates the chain with the evidence and points forward to 2.3.6 (markerless evidence) and 2.3.8 (gaps).
+%%     B: end 2.3.2 after slot 5 and let 2.3.8 do the closing; then the two paragraphs below move to 2.3.8.
+%% [FIX] the training-data cause now has a source: Samani p.2 "no existing tool can predict whether a pose estimation model will detect landmarks reliably from a given camera angle, as this depends on the model's training distribution".
+%%     It is THEIR statement, not a tested result -- attribute it ("Samani et al. argue ..."). Your "e.g. front-view" example stays hedged.
+These assumptions break down when applying a pose estimator on a human, as pose algorithms are trained on vast sets of labeled data such as the COCO dataset and models generally perform better on data resembling their training data. Therefore if particular views in the training dataset have been biased towards e.g. front-view then detectors when placed in a rear-view will not perform equally well. That is to say detection algorithms' performance is dependent on their position relative to the subject.
+% !!!!!!!!!!!!!!!! FACT 3 OF 3 (last one still open: "insufficient") !!!!!!!!!!!!!!!!
+%%  "insufficient" is a conclusion with no evidence in front of it. Replace it with the chain: proxies -> checked only in simulation or against marker/LED visibility or a classical estimator
+%%     -> markerless studies show view-dependent accuracy (samani2026optimizing, zhao2026influence, baldinger2025influence) -> so whether a proxy predicts markerless accuracy is untested -> detector in the loop.
+From literature we have shown that geometric approximations and occlusion based metrics are insufficient as the sole metrics for ensuring the optimal placement of cameras . This research seeks to measure a pose estimator's performance to assess the suitability of a camera configuration in a synthetic environment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.3  HOW THE SPACE IS SEARCHED   [WRITTEN; re-ordered: discretisation -> Olague GA -> Zhao comparison -> SA -> single-swap problem]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{How the Space Is Searched: Discretisation and Optimisers}
+%% [PIECE | from: literature_clean.tex, the bridge sentence about the combinatorial subset selection problem (moved from the end of 2.3.2)]
+Since we are dealing with a combinatorial subset selection problem which requires an optimisation algorithm to explore the space with constraints to best guide the algorithm in exploring and evaluating solutions.
+%% >>> LINK NEEDED:
+%%     This sentence is a fragment ("Since we are dealing with ... which requires ...") -- it needs a main clause. It is a good opening bridge: objectives -> how do we search for the best configuration?
+
+%% [PIECE | from: literature_clean.tex, discretisation paragraph(s)]
+\citet{zhao2013approximate} mentioned that camera placement researchers have resorted to discretising both the physical environment and the camera network configuration search spaces due to the complexity of searching an otherwise continuous and near infinite search space. The viewing sphere has been one method of discretising the camera network configuration search space, employed by \citet{mason1995expert}, \cite{olague2002optimal} and \cite{rahimian2016optimal}. The aforementioned researchers make use of a constrained viewing sphere setting the object to be measured at the centre of the sphere and placing cameras on the surface of a segmented sphere fixing the radius from the object to be measured and the location, pan and tilt of the cameras can be defined by two parameters alpha and beta in spherical coordinates since the radius is constant.
+
+
+%% [PIECE | from: literature_clean.tex, Olague chose a GA (moved up: it is the earliest optimiser, 2002)]
+%% >>> LINK NEEDED:
+%%     Introduce the optimiser choices in chronological order: Olague (GA) -> Aissaoui (GA, later) -> Zhao (compares greedy, MCMC, SA, LP/SDP) -> Rahimian (SA). One signposting sentence at the start.
+%% COACH FIX (attribution): 'inspired' is not claimed. Aissaoui p.14: 'The high dimensionality of the search space and nonlinearity of the camera placement problem for motion capture led us to promote the use of genetic algorithms.' He cites Olague & Mohr as prior GA work.
+Olague pointed out that due to occlusion in the system this introduced discontinuities and that it is a combinatorial optimisation process. The choice of algorithm was a multi-cellular genetic algorithms and inspired the use of genetic algorithms in later work conducted by \citet{aissaoui2018designing}. Olague chose the genetic algorithm due to their proven efficiency in searching non-linear and complex search spaces as well as genetic algorithms providing a generic framework for solving the combinatorial problem.
+
+%% [PIECE | from: literature_clean.tex, Zhao: MIN and FIX, greedy, hybrids]
+\citet{zhao2013approximate} compared and evaluated the accuracy and scalability of numerous optimisation algorithms namely greedy, greedy heuristics, Markov-Chain Monte-Carlo (MCMC),Simulated Annealing, Linear and Semi-definite Programming relaxations. Zhao sought to solve two problems MIN and FIX.
+The MIN problem, defined as minimising the number of cameras such that a target coverage can be achieved subject to some constraints.
+The FIX problem, defined as maximising the coverage of a subject to a fixed number of cameras and other constraints. 
+Zhao's approach to both these problems is as mentioned above the discretisation of the camera configuration that is the location and rotation of cameras and their properties and secondly the discretisation of the target space, that is the objects position and orientations.
+Zhao found that the greedy method found a good approximation for the MIN problem and focused the rest of the paper to solving for the FIX problem. To solve the FIX problem they mentioned that they could iteratively apply a solver for FIX for different number of cameras and search for a minimum that satisfies the target coverage rate. 
+Zhao concluded that a hybrid of approaches to assist in the CND problem would be welcomed such as using the greedy algorithm to initialise camera placement over random camera placement initialisation. Zhao encouraged the further consideration of emergent optimisation techniques not covered in the paper. 
+
+%% [PIECE | from: literature_clean.tex, simulated annealing and the single-swap problem (your best critical point)]
+Both \citet{zhao2013approximate} and \citet{rahimian2016optimal} considered the simulated annealing algorithm. Simulated annealing is an effective method for finding solutions close to the global optimal. Simulated annealing mimics the cooling, annealing, of a heated metal. The annealing technique starts with some high temperature T, which represents the probability of accepting configurations with a higher error metric and as the temperature T cools the lower the probability of accepting a solution with a higher error metric until the objective function does not change overtime. The high temperature assists the algorithm of escaping local minima by selecting worse solutions initially with the hopes of cooling toward a global optimum.
+The triangulation constraint is problematic for the SA algorithm as SA only changes a single camera at a time. This means that swapping out a camera does not necessarily mean that the new camera will benefit the system as keypoint might still only be visible by a single camera. \citet{rahimian2016optimal} combat this by adding a penalty for uncovered keypoints so that the algorithm is rewarded for adjusting a camera such that it covers a previously unseen keypoint, despite it still not being triangulable it is at least visible and thus rewarded. 
+
+%% >>> LINK NEEDED:
+%%     End 2.3.3 by handing over to 2.5: single-swap SA is the failure mode that a fixed-size, goodness-driven swap (FEPSO) addresses. Frame it as fit-for-purpose, not a novelty claim.
+%% COACH: p.1218 Rahimian: "we modified the objective function to penalize target points covered by no target point" -- the penalty is on POINTS seen by no camera (not "keypoints uncovered" in general). Aissaoui and Olague also use fixed-size candidate sets; do not claim fixed-size search is new.
+
+%% [DUP note] the viewing sphere is explained in full here AND as one clause in slot 3 -- keep the full version here only.
+%%     "discretising both the physical environment and the camera network configuration" appears in the first paragraph and again in "Zhao's approach to both these problems ..." -- keep once.
+%% [CONFIRMED] Zhao p.13: "the output of a greedy approach can be used as an initialization for the sampling methods"; his "emerging optimization tools" example is LASSO (convex), not swarm methods.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.4  SUBJECT AND OCCLUSION MODELLING   [PIECES FROM YOUR CHAT PLACED HERE]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Subject and Occlusion Modelling}
+%% COACH TODO: compare what each paper treats as the SUBJECT: static points (Olague, Mason, Zhao); planar occluders (Chen, Rahimian); marker-bearing humanoid (Aissaoui, H-Anim, 54 tags, p.16/Table 1); motion statistics, no body model (Bodor). End on: none uses an articulated rendered human doing exercises seen through a learned detector.
+%% [PIECE | from: your pasted paragraph: "Subjects being captured usually will be orientated in a room ..."]
+Subjects being captured usually will be orientated in a room and thus occlusions distribution and probability of occlusion, especially of dynamic, is not uniformly distributed across the coverage space.
+%% [PIECE | from: your pasted paragraph: "Humans performing exercises generally complete them periodically ..."]
+Humans performing exercises generally complete them periodically in repetitions forming a set. This gives insight intothe nature of potential occlusion and allows for educated guesses to be made.
+%% >>> LINK NEEDED:
+%%     Frame these two as YOUR subject (exercises: oriented in a room, periodic) versus what the reviewed papers modelled; a reader needs the contrast stated, not implied.
+%%     Link to Chen & Davis: uniformly distributed occluder orientations (p.220) vs your point that limbs are in front of the body.
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: one paragraph per subject type (static points, planes, marker humanoid, no body), then your exercise subject as the contrast.
+%%     B: a short comparison table (paper | subject | what occludes) and one paragraph of commentary.
+%% COACH: your points about exercise periodicity and room orientation are an OPPORTUNITY you exploit (you use the 3 fastest repetitions), not a flaw in the papers -- say it that way.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.5  SIMULATION FIDELITY AND VALIDATION   [WRITTEN, 1 paragraph]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Simulation Fidelity and Validation}
+\citet{jorgensen2018simulation} highlights the value that simulation based techniques hold over real-world testing. Every time a new layout is needing to be tested the simulation environment is updated and there is no need for rearrangement, recalibration, or retrials of motion capture where pose estimation is needing to be re-evaluated. Jørgensen rightly noted that photo-realism rendering is computationally expensive and that often a trade off needs to be made between realism and rendering time. Using simulation is feasible to do many more experiments as the only cost is computation time when compared to the real-world where retrials are prone to unsystematic trial and error. The research contributed in that high success rates in the simulation of their experiments matched to high success rates in the real-world. They mention that for synthetic images to be used in the context of computer vision that two criteria need to be met that is namely: the images need to be sufficiently realistic and secondly that the computer vision algorithms need to exhibit similar behaviour for both the real and synthetic images. 
+
+%% >>> LINK NEEDED:
+%%     Open with a bridging sentence (simulation only helps if results transfer; Jorgensen is the only paper that tests sim vs real). End with a pointer to 2.4 Sim2Real.
+%% COACH: add the paper's own caveat for balance: p.525 "camera placements with high success rates in simulation matched camera placements with high success rates in the real world", AND p.532 "The main difference is the background illumination" and errors only weakly correlated between sim and real. Readers trust you more when you report both.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.6  EMPIRICAL EVIDENCE FROM MARKERLESS CONFIGURATION STUDIES   [EMPTY]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Empirical Evidence from Markerless Configuration Studies}
+%% COACH TODO (only citations): three points - (a) configuration matters (yang2025evaluation, lei2026effect, kim2026comparison, kwak2025assessing); (b) optimum depends on detector/task, ~45 deg in samani2026, front/back ~69-81 deg in zhao2026, back view best in baldinger2025; (c) these test a handful of hand-chosen configs. wren2023/nishikawa2025/yang2025comparison are marker-vs-markerless agreement studies - move to 2.1.
+\cite{kwak2025assessing}
+\cite{yang2025comparison}
+\cite{nishikawa2025comparison}
+\cite{kim2026comparison}
+\cite{wren2023comparison}
+
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: three paragraphs: (a) configuration matters; (b) the optimum depends on detector/task (not a simple 90 deg rule); (c) these studies cannot search the space.
+%%     B: a compact table (study | detector | cameras varied | main finding) plus one summarising paragraph.
+%% >>> LINK NEEDED:
+%%     This subsection is where the markerless evidence for slot 6 lives; the pivot and closing in 2.3.2 point forward to it.
+
+%% [DUP note for 2.3.4] your "limbs are in front of the body" critique already sits in slot 4a (Chen & Davis). In 2.3.4 point back to it rather than repeat it.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.7  LEARNED POSE ESTIMATION IN THE LOOP   [EMPTY]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Learned Pose Estimation in the Loop: Nearest Neighbours}
+%% COACH TODO (empty): ActiveMoCap + Ci et al. Read their methods first. Key distinction to state: both steer MOVING cameras online; you choose the best FIXED configuration.
+
+%% COACH facts ready for you: ActiveMoCap = one moving camera, uncertainty as surrogate for accuracy, AirSim + CMU mocap; real part = MPI-INF-3DHP with 14 fixed viewpoints. Ci et al. = multi-agent RL, reward 1 - Geman-McClure(MPJPE) (0 if <2 cameras), YOLOv3 + HRNet-w32 frozen, UE4, fixed arrays saturate beyond ~8 cameras. Read their methods yourself before writing.
+%% >>> LINK NEEDED:
+%%     Say the difference in ONE sentence: they steer moving cameras online; you find the best FIXED configuration.
+
+%% [MOVED HERE] your two Ci sentences, moved from slot 5.
+%% [FIX] "multi-pose" -> multi-person (Ci: "3D Human Pose Estimation in dynamic human crowds", abstract).
+Whilst \citet{ci2023proactive} is the closest paper to our research in terms of multi-pose, synthetic data pose estimation its use of moving cameras is outside of the context of static cameras for motion capture analysis of sports and biomechanics.
+%% [FIX] not quite "no insight": Ci et al. DID compare fixed arrays of 6 to 24 cameras (appendix, arXiv p.23), MPJPE 78.5-94.9 mm vs 51.6 mm for 5 active cameras:
+%%     "the fixed-camera system has saturated the reconstruction accuracy beyond 8 cameras" ... "We reason this is due to the errors and biases in the 2D pose model".
+%%     That is useful evidence FOR you (detector error, not geometry, limits fixed arrays) -- reshape this sentence around it.
+This means that we gain no insight as to how a pose estimator might perform under differing camera configurations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3.8  SUMMARY AND RESEARCH GAP   [EMPTY -- your table goes here]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Summary and Research Gap}
+%% COACH TODO (empty): comparison table (your 5-column table) + gaps G1-G4, each ending in the objective (O#) it motivates. Draft table/gaps exist in lit_2_3_8_draft.tex but must be checked against the papers (e.g. Jorgensen 'detector' wording).
+%% >>> LINK NEEDED:
+%%     Your 5-column table (Work | Optimises | Assumes | Validated against | Estimator in loop?) goes here, cells cut to one clause because the detail now lives in the 2.3.2 paragraphs.
+%%     Then gaps G1-G4, each ending in the objective it motivates. The PIVOT paragraph in slot 4 is the seed of G1.
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: table first, then four short gap paragraphs.
+%%     B: gaps first (as claims), then the table as evidence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PARKING LOT -- pieces of yours that are good but do not belong in the spine
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% [PIECE | from: your pasted paragraph: "In the real-world camera extrinsics and intrinsic parameters are not perfectly known ..."]
+%% COACH: true, but it applies to YOUR simulation too (synthetic calibration is exact). So it cannot be a gap you claim to fill. Candidate homes: Chapter 1 Scope and Limitations, or Chapter 4 Assumptions and Limitations of the Formulation.
+In the real-world camera extrinsics and intrinsic parameters are not perfectly known and carry some measure of error which propagates forward to 3D reconstruction error of 2D keypoints.
+%% SUGGESTION (pick one, mix, or ignore):
+%%     A: move to Scope and Limitations (Chapter 1) as "calibration is exact in simulation".
+%%     B: keep one clause in 2.3.2 only if you also say your own simulation shares the assumption.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.4 - 2.6  SYNTHETIC DATA / OPTIMISATION / SUMMARY   [your skeleton, unchanged]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% COACH: lower priority than the spine. Leave until 2.3 is solid. Each of these should be a DECISION section (which dataset, which body model, which motion data, which tool, which optimiser) not a survey.
+\section{Synthetic Data for Human Pose Estimation}
+
+\subsection{Synthetic Human Datasets}
+%% COACH TODO (citations only): decision section - compare datasets against YOUR requirements, end with the choice and the honest reason.
+
+\cite{varol2017learning}
+\cite{patel2021agora}
+\cite{yang2023synbody}
+\cite{black2023bedlam}
+\cite{tesch2025bedlam2}
+
+\subsection{Human Body Models: Early Approaches}
+
+3D Human Body Model representations started as early as the 1970s with work by \citet{marr1978representation} representing the human body as a hierarchical tree structure each component corresponding to a body part represented as a cylinder. The work by \cite{marr1978representation} was used by \citet{hogg1983model} when developing the WALKER model that represents a human as a series of hierarchical components by means of classical image processing techniques such as edge detection a walking human in a scene could be located and represented by the WALKER model as series of cylindrical components. \citet{rohr1994towards} continued the model-based recognition humans that \cite{marr1978representation} and \citet{hogg1983model}  using cylinders but contributed further by using medical motion studies to develop a motion model however both were constrained models restricted to walking parallel to the image plane.
+\citet{gavrila19963} made use of tapered super-quadratics, generalisations of ellipsoids, to create the ELLEN and DARIU human body models that are unconstrained in fitting to various complex human motion. 
+
+The problem with these human body model representations is that the human is not a hierarchy of cylinders or superquadratics. 
+A breakthrough in representing the complexity of human motion started with faces in the 1999 SIGGRAPH paper by \citet{blanz2023morphable} titled \textit{A morphable model for the synthesis of 3D faces} which utilised 200 head scans providing structure (facial features) and texture (colour) data in cylindrical coordinates of human faces. They developed a morphable 3D face model representing the face as a linear combination of the shape and texture vectors. The shape vector contained x,y,z coordinates for each of the vertices of the shape. The texture vector contained r,g,b values for each of the corresponding vertices. This morphable model allowed for new unseen facial pictures to be represented in by the 3D morphable model.
+
+
+
+Human body models are an important component of human pose estimation. 
+Early approaches to human body modelling was using cylinders to appropriate the limbs.
+
+\subsection{Human Body Models: SMPL and SMPL-X}
+The skinned meshed linear blended person model
+\cite{loper2015smpl}
+\cite{SMPL-X:2019}
+\cite{bregier2026human}
+
+\subsection{Motion Data}
+\cite{mahmood2019amass}
+\cite{ghorbani2021soma}
+
+\subsection{Digital Content Creation Tools}
+Maybe a table showing the languages, add-ons, rendering, api's
+\subsubsection{Unreal}
+\subsubsection{Unity}
+\subsubsection{Blender}
+
+\subsection{Sim-to-Real Transfer}
+
+\section{Optimisation for Combinatorial Subset Selection}
+All optimisation methods
+ \cite{jorgensen2018simulation} \cite{olague2002optimal} \cite{zhao2013approximate}, \cite{rahimian2016optimal}
+
+\subsection{Combinatorial Subset Selection}
+
+\subsection{Continuous Metaheuristics}
+ \cite{eberhart1995particle}
+ \cite{storn1997differential}
+
+\subsection{Discrete and Set-Based Variants}
+\cite{van2023set}
+\cite{langeveld2015set}
+
+\subsection{Fixed-Cardinality Fuzzy and Evolutionary Variants}
+\cite{khan2012fuzzy}
+\cite{mohiuddin2016fuzzy}
+
+\section{Chapter Summary}
